@@ -2,6 +2,8 @@ import '../models/destination.dart';
 import '../models/parking_space.dart';
 import 'distance_service.dart';
 
+enum ParkingSortOrder { distance, price, safetyScore }
+
 class ParkingResult {
   const ParkingResult({
     required this.space,
