@@ -504,6 +504,11 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                       setState(() => _sortOrder = value ?? ParkingSortOrder.distance);
                       _applyFilters();
                     },
+                    favouritesOnly: _favouritesOnly,
+                    onFavouritesOnlyChanged: (value) {
+                      setState(() => _favouritesOnly = value);
+                      _applyFilters();
+                    },
                   ),
                   const SizedBox(height: 14),
                   if (_alerts.isNotEmpty) _AlertSection(alerts: _alerts),
@@ -538,6 +543,8 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                     ..._results.map(
                       (result) => ParkingCard(
                         result: result,
+                        isFavourite: _favouriteIds.contains(result.space.id),
+                        onFavouriteToggle: () => _toggleFavourite(result.space.id),
                         onDetails: () => _showDetails(result),
                         onNavigate: () => _openNavigation(result.space),
                       ),
