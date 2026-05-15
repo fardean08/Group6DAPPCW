@@ -56,6 +56,9 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
   String _selectedType = 'any';
   bool _requiresLighting = false;
   ParkingSortOrder _sortOrder = ParkingSortOrder.distance;
+
+  static const _recentKey = 'recent_destinations';
+  List<Destination> _recentDestinations = [];
   bool _isLoading = true;
   bool _isSearching = false;
   DateTime _lastUpdated = DateTime.now();
