@@ -39,9 +39,14 @@ jobs:
     # Only publish docs on pushes to main so PRs don't overwrite the live site
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
-    # Needed so the workflow can write to the gh-pages branch
     permissions:
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v4
@@ -58,9 +63,14 @@ jobs:
       - name: Generate API docs with dartdoc
         run: dart doc --output doc/api
 
-      - name: Publish docs to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: doc/api
-          destination_dir: .
+          path: doc/api
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
