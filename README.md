@@ -1,5 +1,9 @@
 # Smart Parking Finder - Flutter + Firebase
 
+[![Tests](https://github.com/fardean08/Group6DAPPCW/actions/workflows/test.yml/badge.svg)](https://github.com/fardean08/Group6DAPPCW/actions/workflows/test.yml)
+
+**API Documentation:** https://fardean08.github.io/Group6DAPPCW/
+
 This is a Flutter/Firebase version of the Smart Parking Finder prototype.
 
 It includes:
