@@ -2,25 +2,62 @@ import '../models/destination.dart';
 import '../models/parking_space.dart';
 import 'distance_service.dart';
 
-enum ParkingSortOrder { distance, price, safetyScore }
+/// Controls how [ParkingService.filterParkingSpaces] orders its results.
+enum ParkingSortOrder {
+  /// Sort by walking distance, nearest first.
+  distance,
 
+  /// Sort by price per hour, cheapest first.
+  price,
+
+  /// Sort by safety score, safest (highest score) first.
+  safetyScore,
+}
+
+/// Pairs a [ParkingSpace] with its calculated walking distance from the
+/// searched destination.
+///
+/// Created by [ParkingService.filterParkingSpaces] and consumed by the UI
+/// to display distance labels and drive map marker visibility.
 class ParkingResult {
+  /// Creates a [ParkingResult] associating a space with its walking distance.
   const ParkingResult({
     required this.space,
     required this.walkingDistanceKm,
   });
 
+  /// The parking space this result describes.
   final ParkingSpace space;
+
+  /// Straight-line walking distance in kilometres from the destination to
+  /// this space, rounded to 2 decimal places.
   final double walkingDistanceKm;
 }
 
+/// Business-logic layer for generating, filtering, sorting, and refreshing
+/// parking space data.
+///
+/// Pure Dart — no Flutter dependency — so all methods are fully unit-testable.
+/// A [DistanceService] is injected to allow haversine calculations to be
+/// replaced in tests.
 class ParkingService {
+  /// Creates a [ParkingService] with an optional custom [distanceService].
   const ParkingService({
     this.distanceService = const DistanceService(),
   });
 
+  /// Service used to calculate the walking distance between the destination
+  /// and each parking space.
   final DistanceService distanceService;
 
+  /// Generates six parking spaces positioned around [destination] at
+  /// graduated distances (~0.25 km to ~3.0 km).
+  ///
+  /// Each space is based on a fixed template (type, price, capacity, etc.)
+  /// with its [ParkingSpace.name] prefixed by the first segment of the
+  /// destination name and its coordinates offset from the destination centre.
+  /// This ensures that adjusting the distance filter progressively reveals
+  /// additional results during a demo.
   List<ParkingSpace> generateParkingSpaces(Destination destination) {
     final baseTemplates = <ParkingSpace>[
       const ParkingSpace(
@@ -152,6 +189,17 @@ class ParkingService {
     }).toList();
   }
 
+  /// Filters and sorts [spaces] relative to [destination] according to the
+  /// supplied criteria, returning only matching [ParkingResult]s.
+  ///
+  /// A space is excluded when any of the following are true:
+  /// - [ParkingSpace.availableSpaces] is zero (full car park).
+  /// - [ParkingSpace.pricePerHour] exceeds [maxPrice].
+  /// - Walking distance exceeds [maxDistanceKm].
+  /// - [type] is not `"any"` and [ParkingSpace.type] does not match [type].
+  /// - [requiresLighting] is true and [ParkingSpace.hasLighting] is false.
+  ///
+  /// The remaining results are sorted according to [sortOrder].
   List<ParkingResult> filterParkingSpaces({
     required Destination destination,
     required List<ParkingSpace> spaces,
@@ -210,6 +258,13 @@ class ParkingService {
     return results;
   }
 
+  /// Simulates a live availability update by incrementing or decrementing
+  /// each space's [ParkingSpace.availableSpaces] by one.
+  ///
+  /// The direction of change alternates based on whether occupancy was
+  /// previously increasing or decreasing, producing a smooth oscillation
+  /// between full and empty rather than random noise. Full spaces (0 available)
+  /// remain unchanged.
   List<ParkingSpace> refreshAvailability(List<ParkingSpace> spaces) {
     return spaces.asMap().entries.map((entry) {
       final space = entry.value;
@@ -233,6 +288,11 @@ class ParkingService {
     }).toList();
   }
 
+  /// Returns the subset of [spaces] whose [ParkingSpace.availableSpaces] has
+  /// increased since the last refresh (i.e. spaces that were recently freed up).
+  ///
+  /// Used by [ParkingHomeScreen] to trigger a snackbar notification when
+  /// previously-full spaces become available.
   List<ParkingSpace> spacesWithNewAvailability(List<ParkingSpace> spaces) {
     return spaces
         .where(
@@ -241,6 +301,10 @@ class ParkingService {
         .toList();
   }
 
+  /// Extracts the first comma-separated segment of a destination name.
+  ///
+  /// For example, `"Portsmouth Guildhall, Guildhall Square, Portsmouth"` →
+  /// `"Portsmouth Guildhall"`. Used to prefix generated parking space names.
   String _shortDestinationName(String name) {
     final firstPart = name.split(',').first.trim();
     return firstPart.isEmpty ? 'Local' : firstPart;

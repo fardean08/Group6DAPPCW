@@ -4,11 +4,27 @@ import 'package:http/http.dart' as http;
 
 import '../models/destination.dart';
 
+/// Resolves a free-text place query to geographic coordinates using the
+/// OpenStreetMap Nominatim geocoding API.
+///
+/// Results are restricted to Great Britain (`countrycodes=gb`) and limited
+/// to the single best match. An [http.Client] can be injected for testing
+/// without making real network calls.
 class GeocodingService {
+  /// Creates a [GeocodingService].
+  ///
+  /// Pass a custom [client] to intercept HTTP requests in tests. When [client]
+  /// is omitted the top-level `http.get` function is used directly.
   const GeocodingService({http.Client? client}) : _client = client;
 
   final http.Client? _client;
 
+  /// Searches for [query] and returns the best-matching [Destination].
+  ///
+  /// Calls the Nominatim `/search` endpoint with `format=json&limit=1&countrycodes=gb`.
+  /// Throws an [Exception] if:
+  /// - the HTTP response status is not 200, or
+  /// - the result set is empty (no match found for [query]).
   Future<Destination> searchDestination(String query) async {
     final uri = Uri.https(
       'nominatim.openstreetmap.org',
