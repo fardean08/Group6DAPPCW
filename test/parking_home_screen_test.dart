@@ -143,6 +143,58 @@ void main() {
     );
   });
 
+  testWidgets('sign-out button is present in app bar', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    expect(find.byIcon(Icons.logout), findsOneWidget);
+  });
+
+  testWidgets('shows favourites-only filter toggle', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    final listScrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text('Favourites only'),
+      300.0,
+      scrollable: listScrollable,
+    );
+    expect(find.text('Favourites only'), findsOneWidget);
+  });
+
+  testWidgets('toggling favourites-only filter does not crash', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    final listScrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text('Favourites only'),
+      300.0,
+      scrollable: listScrollable,
+    );
+    await tester.tap(find.text('Favourites only'));
+    await tester.pump();
+    expect(find.text('Smart Parking Finder'), findsOneWidget);
+  });
+
+  testWidgets('reset filters button re-renders without error', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    await tester.tap(find.text('Reset filters'));
+    await tester.pump();
+    expect(find.text('Smart Parking Finder'), findsOneWidget);
+  });
+
+  testWidgets('shows sort order dropdown', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    final listScrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text('Sort: Price'),
+      300.0,
+      scrollable: listScrollable,
+    );
+    expect(find.text('Sort: Price'), findsOneWidget);
+  });
+
   testWidgets('pre-loads stored spaces from repository', (tester) async {
     final repo = MemoryParkingRepository();
     await repo.replaceParkingSpaces(
