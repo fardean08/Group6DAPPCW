@@ -407,10 +407,18 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                   ),
                   const SizedBox(height: 14),
                   _FiltersSection(
-                    maxPriceController: _maxPriceController,
-                    maxDistanceController: _maxDistanceController,
+                    maxPrice: _maxPrice,
+                    maxDistance: _maxDistance,
                     selectedType: _selectedType,
                     requiresLighting: _requiresLighting,
+                    onPriceChanged: (v) {
+                      setState(() => _maxPrice = v);
+                      _applyFilters();
+                    },
+                    onDistanceChanged: (v) {
+                      setState(() => _maxDistance = v);
+                      _applyFilters();
+                    },
                     onTypeChanged: (value) {
                       setState(() => _selectedType = value ?? 'any');
                       _applyFilters();
@@ -419,7 +427,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                       setState(() => _requiresLighting = value);
                       _applyFilters();
                     },
-                    onApply: _applyFilters,
                   ),
                   const SizedBox(height: 14),
                   if (_alerts.isNotEmpty) _AlertSection(alerts: _alerts),
