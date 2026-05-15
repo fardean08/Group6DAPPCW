@@ -28,18 +28,45 @@ class _ParkingMapState extends State<ParkingMap> {
   final MapController _mapController = MapController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _fitCamera());
+  }
+
+  @override
   void didUpdateWidget(covariant ParkingMap oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.destination.latitude != widget.destination.latitude ||
-        oldWidget.destination.longitude != widget.destination.longitude) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _mapController.move(
-          LatLng(widget.destination.latitude, widget.destination.longitude),
-          15,
-        );
-      });
+    final destinationChanged =
+        oldWidget.destination.latitude != widget.destination.latitude ||
+        oldWidget.destination.longitude != widget.destination.longitude;
+    final resultsChanged =
+        oldWidget.visibleResults.length != widget.visibleResults.length;
+
+    if (destinationChanged || resultsChanged) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _fitCamera());
     }
+  }
+
+  void _fitCamera() {
+    final points = [
+      LatLng(widget.destination.latitude, widget.destination.longitude),
+      ...widget.visibleResults
+          .map((r) => LatLng(r.space.latitude, r.space.longitude)),
+    ];
+
+    if (points.length == 1) {
+      _mapController.move(points.first, 15);
+      return;
+    }
+
+    _mapController.fitCamera(
+      CameraFit.coordinates(
+        coordinates: points,
+        padding: const EdgeInsets.all(60),
+        maxZoom: 16,
+      ),
+    );
   }
 
   @override
