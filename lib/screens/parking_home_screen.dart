@@ -97,7 +97,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
 
   Future<void> _toggleFavourite(String id) async {
     final updated = Set<String>.from(_favouriteIds);
-    if (updated.contains(id)) updated.remove(id) else updated.add(id);
+    if (updated.contains(id)) { updated.remove(id); } else { updated.add(id); }
     setState(() => _favouriteIds = updated);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_favKey, jsonEncode(updated.toList()));
