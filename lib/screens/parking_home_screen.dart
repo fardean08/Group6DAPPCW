@@ -178,8 +178,8 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
 
   void _resetFilters() {
     setState(() {
-      _maxPriceController.text = '3.00';
-      _maxDistanceController.text = '2.00';
+      _maxPrice = 3.00;
+      _maxDistance = 2.00;
       _selectedType = 'any';
       _requiresLighting = false;
     });
