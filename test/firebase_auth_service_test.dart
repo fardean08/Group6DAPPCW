@@ -56,7 +56,8 @@ void main() {
         final mockAuth = MockFirebaseAuth();
         final service = FirebaseAuthService(firebaseAuth: mockAuth);
 
-        final future = service.authStateChanges.first;
+        // skip(1) skips the initial null emission (not signed in yet)
+        final future = service.authStateChanges.skip(1).first;
 
         await service.signUp(
           name: 'Alice',
@@ -108,7 +109,8 @@ void main() {
         );
         final service = FirebaseAuthService(firebaseAuth: mockAuth);
 
-        final future = service.authStateChanges.first;
+        // skip(1) skips the initial null emission (not signed in yet)
+        final future = service.authStateChanges.skip(1).first;
 
         await service.signIn(
           email: 'bob@example.com',
@@ -137,7 +139,8 @@ void main() {
         );
         final service = FirebaseAuthService(firebaseAuth: mockAuth);
 
-        final future = service.authStateChanges.first;
+        // skip(1) skips the initial signed-in user emission
+        final future = service.authStateChanges.skip(1).first;
         await service.signOut();
 
         final emitted = await future;
