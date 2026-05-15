@@ -526,6 +526,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                       setState(() => _favouritesOnly = value);
                       _applyFilters();
                     },
+                    onPresetSelected: _applyPreset,
                   ),
                   const SizedBox(height: 14),
                   if (_alerts.isNotEmpty) _AlertSection(alerts: _alerts),
