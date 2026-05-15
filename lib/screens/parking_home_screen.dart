@@ -832,6 +832,35 @@ class _FiltersSection extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Quick filters',
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 8,
+              children: [
+                ActionChip(
+                  avatar: const Icon(Icons.nightlight_round, size: 16),
+                  label: const Text('Evening'),
+                  onPressed: () => onPresetSelected('evening'),
+                ),
+                ActionChip(
+                  avatar: const Icon(Icons.savings_outlined, size: 16),
+                  label: const Text('Cheap'),
+                  onPressed: () => onPresetSelected('cheap'),
+                ),
+                ActionChip(
+                  avatar: const Icon(Icons.accessible, size: 16),
+                  label: const Text('Accessible'),
+                  onPressed: () => onPresetSelected('accessible'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
