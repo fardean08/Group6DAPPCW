@@ -38,8 +38,8 @@ void main() {
     // Short distance
     // ---------------------------------------------------------------
 
-    test('returns positive distance for coordinates ~0.55 km apart', () {
-      // Portsmouth Guildhall → Portsmouth Harbour station (approx 0.55 km)
+    test('returns positive distance for coordinates ~1.2 km apart', () {
+      // Portsmouth Guildhall → Portsmouth Harbour station (approx 1.2 km)
       final distance = service.calculateDistanceKm(
         startLatitude: 50.7984,
         startLongitude: -1.0911,
@@ -48,7 +48,7 @@ void main() {
       );
 
       expect(distance, greaterThan(0));
-      expect(distance, lessThan(1.0));
+      expect(distance, lessThan(2.0));
     });
 
     // ---------------------------------------------------------------
