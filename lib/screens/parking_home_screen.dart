@@ -676,20 +676,24 @@ class _FiltersSection extends StatelessWidget {
     required this.maxDistance,
     required this.selectedType,
     required this.requiresLighting,
+    required this.sortOrder,
     required this.onPriceChanged,
     required this.onDistanceChanged,
     required this.onTypeChanged,
     required this.onLightingChanged,
+    required this.onSortChanged,
   });
 
   final double maxPrice;
   final double maxDistance;
   final String selectedType;
   final bool requiresLighting;
+  final ParkingSortOrder sortOrder;
   final ValueChanged<double> onPriceChanged;
   final ValueChanged<double> onDistanceChanged;
   final ValueChanged<String?> onTypeChanged;
   final ValueChanged<bool> onLightingChanged;
+  final ValueChanged<ParkingSortOrder?> onSortChanged;
 
   @override
   Widget build(BuildContext context) {
