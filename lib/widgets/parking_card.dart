@@ -124,3 +124,57 @@ class _AvailabilityBadge extends StatelessWidget {
     );
   }
 }
+
+class _OccupancyBar extends StatelessWidget {
+  const _OccupancyBar({
+    required this.availableSpaces,
+    required this.totalSpaces,
+  });
+
+  final int availableSpaces;
+  final int totalSpaces;
+
+  @override
+  Widget build(BuildContext context) {
+    final fraction =
+        totalSpaces == 0 ? 0.0 : availableSpaces / totalSpaces;
+
+    final Color barColor;
+    if (fraction >= 0.5) {
+      barColor = Colors.green.shade600;
+    } else if (fraction >= 0.2) {
+      barColor = Colors.amber.shade700;
+    } else {
+      barColor = Colors.red.shade600;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Occupancy', style: Theme.of(context).textTheme.labelSmall),
+            Text(
+              '${(fraction * 100).round()}% free',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall
+                  ?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: LinearProgressIndicator(
+            value: fraction,
+            backgroundColor: Colors.grey.shade200,
+            valueColor: AlwaysStoppedAnimation<Color>(barColor),
+            minHeight: 8,
+          ),
+        ),
+      ],
+    );
+  }
+}
