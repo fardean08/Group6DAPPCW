@@ -101,3 +101,100 @@ void main() {
       expect(space.bayWidth, 'standard');
       expect(space.notes, '');
     });
+    test('handles integer latitude/longitude values (num cast)', () {
+      final space = ParkingSpace.fromMap('p1', {
+        ...referenceMap,
+        'latitude': 51,
+        'longitude': -1,
+      });
+ 
+      expect(space.latitude, 51.0);
+      expect(space.longitude, -1.0);
+      expect(space.latitude, isA<double>());
+    });
+ 
+    test('handles integer pricePerHour (num cast)', () {
+      final space = ParkingSpace.fromMap('p1', {
+        ...referenceMap,
+        'pricePerHour': 3,
+      });
+ 
+      expect(space.pricePerHour, 3.0);
+      expect(space.pricePerHour, isA<double>());
+    });
+ 
+    test('parses hasLighting as false correctly', () {
+      final space = ParkingSpace.fromMap('p1', {
+        ...referenceMap,
+        'hasLighting': false,
+      });
+ 
+      expect(space.hasLighting, false);
+    });
+ 
+    test('parses hasLighting as true correctly', () {
+      final space = ParkingSpace.fromMap('p1', {
+        ...referenceMap,
+        'hasLighting': true,
+      });
+ 
+      expect(space.hasLighting, true);
+    });
+ 
+    test('uses the provided id, not any id field inside the map', () {
+      final space = ParkingSpace.fromMap('custom-id', referenceMap);
+      expect(space.id, 'custom-id');
+    });
+  });
+ 
+  // ---------------------------------------------------------------
+  // toMap
+  // ---------------------------------------------------------------
+ 
+  group('ParkingSpace.toMap', () {
+    test('serialises all fields to map correctly', () {
+      final map = reference.toMap();
+ 
+      expect(map['name'], 'Central Car Park');
+      expect(map['latitude'], 50.7984);
+      expect(map['longitude'], -1.0911);
+      expect(map['pricePerHour'], 2.80);
+      expect(map['availableSpaces'], 34);
+      expect(map['previousAvailableSpaces'], 30);
+      expect(map['totalSpaces'], 120);
+      expect(map['type'], 'standard');
+      expect(map['hasLighting'], true);
+      expect(map['safetyScore'], 4);
+      expect(map['openingHours'], '24 hours');
+      expect(map['restrictions'], 'Maximum stay 6 hours');
+      expect(map['bayWidth'], 'standard');
+      expect(map['notes'], 'Close to the main destination area.');
+    });
+ 
+    test('does not include id in the map (id is the Firestore document key)', () {
+      final map = reference.toMap();
+      expect(map.containsKey('id'), false);
+    });
+ 
+    test('round-trip: fromMap(toMap()) produces equivalent object', () {
+      final map = reference.toMap();
+      final restored = ParkingSpace.fromMap('p1', map);
+ 
+      expect(restored.id, reference.id);
+      expect(restored.name, reference.name);
+      expect(restored.latitude, reference.latitude);
+      expect(restored.longitude, reference.longitude);
+      expect(restored.pricePerHour, reference.pricePerHour);
+      expect(restored.availableSpaces, reference.availableSpaces);
+      expect(restored.previousAvailableSpaces, reference.previousAvailableSpaces);
+      expect(restored.totalSpaces, reference.totalSpaces);
+      expect(restored.type, reference.type);
+      expect(restored.hasLighting, reference.hasLighting);
+      expect(restored.safetyScore, reference.safetyScore);
+      expect(restored.openingHours, reference.openingHours);
+      expect(restored.restrictions, reference.restrictions);
+      expect(restored.bayWidth, reference.bayWidth);
+      expect(restored.notes, reference.notes);
+    });
+  });
+ 
