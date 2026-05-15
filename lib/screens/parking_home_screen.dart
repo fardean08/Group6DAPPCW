@@ -664,22 +664,24 @@ class _StatCard extends StatelessWidget {
 
 class _FiltersSection extends StatelessWidget {
   const _FiltersSection({
-    required this.maxPriceController,
-    required this.maxDistanceController,
+    required this.maxPrice,
+    required this.maxDistance,
     required this.selectedType,
     required this.requiresLighting,
+    required this.onPriceChanged,
+    required this.onDistanceChanged,
     required this.onTypeChanged,
     required this.onLightingChanged,
-    required this.onApply,
   });
 
-  final TextEditingController maxPriceController;
-  final TextEditingController maxDistanceController;
+  final double maxPrice;
+  final double maxDistance;
   final String selectedType;
   final bool requiresLighting;
+  final ValueChanged<double> onPriceChanged;
+  final ValueChanged<double> onDistanceChanged;
   final ValueChanged<String?> onTypeChanged;
   final ValueChanged<bool> onLightingChanged;
-  final VoidCallback onApply;
 
   @override
   Widget build(BuildContext context) {
@@ -689,24 +691,42 @@ class _FiltersSection extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         child: Column(
           children: [
-            TextField(
-              controller: maxPriceController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Max price/hour (£)',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (_) => onApply(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Max price / hour'),
+                Text(
+                  '£${maxPrice.toStringAsFixed(2)}',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: maxDistanceController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Max walking distance (km)',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (_) => onApply(),
+            Slider(
+              value: maxPrice,
+              min: 0.50,
+              max: 5.00,
+              divisions: 9,
+              label: '£${maxPrice.toStringAsFixed(2)}',
+              onChanged: onPriceChanged,
+            ),
+            const SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Max walking distance'),
+                Text(
+                  '${maxDistance.toStringAsFixed(1)} km',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+            Slider(
+              value: maxDistance,
+              min: 0.5,
+              max: 5.0,
+              divisions: 9,
+              label: '${maxDistance.toStringAsFixed(1)} km',
+              onChanged: onDistanceChanged,
             ),
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
