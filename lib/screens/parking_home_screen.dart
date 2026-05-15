@@ -81,6 +81,33 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     super.dispose();
   }
 
+  Future<void> _loadRecents() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_recentKey);
+    if (raw == null || !mounted) return;
+    final list = jsonDecode(raw) as List;
+    setState(() {
+      _recentDestinations = list.map((e) => Destination(
+        name: e['name'] as String,
+        latitude: (e['lat'] as num).toDouble(),
+        longitude: (e['lon'] as num).toDouble(),
+      )).toList();
+    });
+  }
+
+  Future<void> _addToRecents(Destination destination) async {
+    final updated = [
+      destination,
+      ..._recentDestinations.where((d) => d.name != destination.name),
+    ].take(5).toList();
+    setState(() => _recentDestinations = updated);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_recentKey, jsonEncode([
+      for (final d in updated)
+        {'name': d.name, 'lat': d.latitude, 'lon': d.longitude},
+    ]));
+  }
+
   Future<void> _loadDestination(Destination destination) async {
     setState(() {
       _isLoading = true;
