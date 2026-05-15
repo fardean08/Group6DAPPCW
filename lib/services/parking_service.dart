@@ -94,7 +94,7 @@ class ParkingService {
         name: 'Commercial Road Parking',
         latitude: 0,
         longitude: 0,
-        pricePerHour: 3.20,
+        pricePerHour: 2.90,
         availableSpaces: 18,
         previousAvailableSpaces: 20,
         totalSpaces: 50,
@@ -104,7 +104,7 @@ class ParkingService {
         openingHours: '06:00-23:00',
         restrictions: 'No overnight parking',
         bayWidth: 'standard',
-        notes: 'Close to shops and public transport links.',
+        notes: 'Further from centre, close to shops and public transport.',
       ),
       const ParkingSpace(
         id: 'p6',
