@@ -230,4 +230,151 @@ void main() {
     );
     expect(find.text('Test Car Park'), findsOneWidget);
   });
+
+  testWidgets('empty search field shows snackbar', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    await tester.enterText(find.byType(TextField).first, '');
+    await tester.pump();
+    await tester.tap(find.text('Search area'));
+    await tester.pump();
+    expect(find.text('Enter a destination first.'), findsOneWidget);
+  });
+
+  testWidgets('tapping Evening preset chip does not crash', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    final listScrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text('Evening'),
+      500.0,
+      scrollable: listScrollable,
+    );
+    await tester.tap(find.text('Evening'));
+    await tester.pump();
+    expect(find.text('Smart Parking Finder'), findsOneWidget);
+  });
+
+  testWidgets('tapping Cheap preset chip does not crash', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    final listScrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text('Cheap'),
+      500.0,
+      scrollable: listScrollable,
+    );
+    await tester.tap(find.text('Cheap'));
+    await tester.pump();
+    expect(find.text('Smart Parking Finder'), findsOneWidget);
+  });
+
+  testWidgets('tapping Accessible preset chip does not crash', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    final listScrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text('Accessible'),
+      500.0,
+      scrollable: listScrollable,
+    );
+    await tester.tap(find.text('Accessible'));
+    await tester.pump();
+    expect(find.text('Smart Parking Finder'), findsOneWidget);
+  });
+
+  testWidgets('tapping Refresh availability button does not crash',
+      (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    await tester.tap(find.text('Refresh availability'));
+    await tester.pump();
+    expect(find.text('Smart Parking Finder'), findsOneWidget);
+  });
+
+  testWidgets('Details button opens parking details bottom sheet',
+      (tester) async {
+    final repo = MemoryParkingRepository();
+    await repo.replaceParkingSpaces(
+      destinationKey: 'gillingham-high-street',
+      spaces: [
+        const ParkingSpace(
+          id: 'p2',
+          name: 'Central Car Park',
+          latitude: 51.389,
+          longitude: 0.549,
+          pricePerHour: 2.00,
+          availableSpaces: 5,
+          previousAvailableSpaces: 5,
+          totalSpaces: 30,
+          type: 'standard',
+          hasLighting: true,
+          safetyScore: 3,
+          openingHours: '8am-10pm',
+          restrictions: 'None',
+          bayWidth: 'standard',
+          notes: '',
+        ),
+      ],
+    );
+
+    await pumpApp(tester, repo: repo);
+    await tester.pump();
+    final listScrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text('Details'),
+      500.0,
+      scrollable: listScrollable,
+    );
+    await tester.tap(find.text('Details'));
+    await tester.pumpAndSettle();
+    expect(find.text('Central Car Park'), findsWidgets);
+  });
+
+  testWidgets('favourite toggle on parking card does not crash', (tester) async {
+    final repo = MemoryParkingRepository();
+    await repo.replaceParkingSpaces(
+      destinationKey: 'gillingham-high-street',
+      spaces: [
+        const ParkingSpace(
+          id: 'p3',
+          name: 'Harbour Car Park',
+          latitude: 51.389,
+          longitude: 0.549,
+          pricePerHour: 1.00,
+          availableSpaces: 8,
+          previousAvailableSpaces: 8,
+          totalSpaces: 15,
+          type: 'standard',
+          hasLighting: false,
+          safetyScore: 2,
+          openingHours: '24 hours',
+          restrictions: 'None',
+          bayWidth: 'standard',
+          notes: '',
+        ),
+      ],
+    );
+
+    await pumpApp(tester, repo: repo);
+    await tester.pump();
+    final listScrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.byIcon(Icons.favorite_border),
+      500.0,
+      scrollable: listScrollable,
+    );
+    await tester.tap(find.byIcon(Icons.favorite_border));
+    await tester.pump();
+    expect(find.text('Smart Parking Finder'), findsOneWidget);
+  });
+
+  testWidgets('search field submits on keyboard action', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+    await tester.enterText(find.byType(TextField).first, '');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
+    expect(find.text('Enter a destination first.'), findsOneWidget);
+  });
 }
