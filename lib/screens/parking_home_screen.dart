@@ -164,7 +164,9 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     List<ParkingSpace> spaces = [];
 
     try {
-      spaces = await widget.repository.fetchParkingSpaces(destination.key);
+      spaces = await widget.repository
+          .fetchParkingSpaces(destination.key)
+          .timeout(const Duration(seconds: 8));
     } catch (_) {
       spaces = [];
     }
@@ -176,7 +178,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
         await widget.repository.replaceParkingSpaces(
           destinationKey: destination.key,
           spaces: spaces,
-        );
+        ).timeout(const Duration(seconds: 8));
       } catch (_) {
         // Keep the generated data even if persistence is unavailable.
       }
