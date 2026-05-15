@@ -202,7 +202,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
 
   void _applyFilters() {
     setState(() {
-      _results = _parkingService.filterParkingSpaces(
+      var results = _parkingService.filterParkingSpaces(
         destination: _destination,
         spaces: _spaces,
         maxPrice: _maxPrice,
@@ -211,6 +211,12 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
         requiresLighting: _requiresLighting,
         sortOrder: _sortOrder,
       );
+      if (_favouritesOnly) {
+        results = results
+            .where((r) => _favouriteIds.contains(r.space.id))
+            .toList();
+      }
+      _results = results;
     });
   }
 
