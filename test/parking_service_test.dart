@@ -171,5 +171,45 @@ void main() {
 
       expect(result, isEmpty);
     });
+
+    test('filterParkingSpaces returns results sorted nearest first', () {
+      final spaces = service.generateParkingSpaces(destination);
+
+      final results = service.filterParkingSpaces(
+        destination: destination,
+        spaces: spaces,
+        maxPrice: 10,
+        maxDistanceKm: 5,
+        type: 'any',
+        requiresLighting: false,
+      );
+
+      for (var i = 0; i < results.length - 1; i++) {
+        expect(
+          results[i].walkingDistanceKm,
+          lessThanOrEqualTo(results[i + 1].walkingDistanceKm),
+        );
+      }
+    });
+
+    test('filterParkingSpaces applies all active filters simultaneously', () {
+      final spaces = service.generateParkingSpaces(destination);
+
+      final results = service.filterParkingSpaces(
+        destination: destination,
+        spaces: spaces,
+        maxPrice: 2.0,
+        maxDistanceKm: 5,
+        type: 'standard',
+        requiresLighting: true,
+      );
+
+      for (final r in results) {
+        expect(r.space.pricePerHour, lessThanOrEqualTo(2.0));
+        expect(r.space.type, 'standard');
+        expect(r.space.hasLighting, true);
+        expect(r.space.availableSpaces, greaterThan(0));
+      }
+    });
   });
 }

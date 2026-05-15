@@ -120,5 +120,26 @@ void main() {
 
       expect(destination.key, equals(destination.key));
     });
+
+    test('key preserves digits in the name', () {
+      const destination = Destination(
+        name: 'Car Park 2A',
+        latitude: 50.7984,
+        longitude: -1.0911,
+      );
+
+      expect(destination.key, 'car-park-2a');
+    });
+
+    test('key falls back to coordinates when name contains only special characters', () {
+      const destination = Destination(
+        name: '!!!@@@',
+        latitude: 50.7984,
+        longitude: -1.0911,
+      );
+
+      expect(destination.key, isNotEmpty);
+      expect(destination.key, contains('50'));
+    });
   });
 }
