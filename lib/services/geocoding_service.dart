@@ -5,7 +5,9 @@ import 'package:http/http.dart' as http;
 import '../models/destination.dart';
 
 class GeocodingService {
-  const GeocodingService();
+  const GeocodingService({http.Client? client}) : _client = client;
+
+  final http.Client? _client;
 
   Future<Destination> searchDestination(String query) async {
     final uri = Uri.https(
@@ -19,13 +21,20 @@ class GeocodingService {
       },
     );
 
-    final response = await http.get(
-      uri,
-      headers: const {
-        'Accept': 'application/json',
-        'User-Agent': 'SmartParkingFinderCourseworkPrototype/1.0',
-      },
-    );
+    final response = await (_client?.get(
+          uri,
+          headers: const {
+            'Accept': 'application/json',
+            'User-Agent': 'SmartParkingFinderCourseworkPrototype/1.0',
+          },
+        ) ??
+        http.get(
+          uri,
+          headers: const {
+            'Accept': 'application/json',
+            'User-Agent': 'SmartParkingFinderCourseworkPrototype/1.0',
+          },
+        ));
 
     if (response.statusCode != 200) {
       throw Exception('Could not search for destination.');

@@ -8,8 +8,6 @@
 // but real login/sign-up through Firebase needs the generated options file.
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart'
-    show TargetPlatform, defaultTargetPlatform, kIsWeb;
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
