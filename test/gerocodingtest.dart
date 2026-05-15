@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../models/destination.dart';
+import '../lib/models/destination.dart';
 
 /// Converts a destination name string into geographic coordinates
 /// using the Nominatim OpenStreetMap geocoding API.
