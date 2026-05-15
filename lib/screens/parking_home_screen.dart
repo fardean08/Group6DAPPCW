@@ -66,6 +66,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
   @override
   void initState() {
     super.initState();
+    _loadRecents();
     _loadDestination(_destination);
 
     _timer = Timer.periodic(
@@ -164,6 +165,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     try {
       final destination = await _geocodingService.searchDestination(query);
       await _loadDestination(destination);
+      await _addToRecents(destination);
     } catch (error) {
       _showSnackBar(error.toString().replaceFirst('Exception: ', ''));
     } finally {
