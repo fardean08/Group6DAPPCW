@@ -8,11 +8,15 @@ class ParkingCard extends StatelessWidget {
     required this.result,
     required this.onDetails,
     required this.onNavigate,
+    this.isFavourite = false,
+    this.onFavouriteToggle,
   });
 
   final ParkingResult result;
   final VoidCallback onDetails;
   final VoidCallback onNavigate;
+  final bool isFavourite;
+  final VoidCallback? onFavouriteToggle;
 
   @override
   Widget build(BuildContext context) {
