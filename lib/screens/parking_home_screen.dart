@@ -53,6 +53,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
   Timer? _timer;
   String _selectedType = 'any';
   bool _requiresLighting = false;
+  ParkingSortOrder _sortOrder = ParkingSortOrder.distance;
   bool _isLoading = true;
   bool _isSearching = false;
   DateTime _lastUpdated = DateTime.now();
