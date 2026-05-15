@@ -166,7 +166,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     try {
       spaces = await widget.repository
           .fetchParkingSpaces(destination.key)
-          .timeout(const Duration(seconds: 8));
+          .timeout(const Duration(seconds: 4));
     } catch (_) {
       spaces = [];
     }
@@ -174,14 +174,11 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     if (spaces.isEmpty) {
       spaces = _parkingService.generateParkingSpaces(destination);
 
-      try {
-        await widget.repository.replaceParkingSpaces(
-          destinationKey: destination.key,
-          spaces: spaces,
-        ).timeout(const Duration(seconds: 8));
-      } catch (_) {
-        // Keep the generated data even if persistence is unavailable.
-      }
+      // Persist in the background — don't block the UI on the write.
+      widget.repository
+          .replaceParkingSpaces(destinationKey: destination.key, spaces: spaces)
+          .timeout(const Duration(seconds: 10))
+          .catchError((_) {});
     }
 
     if (!mounted) {
