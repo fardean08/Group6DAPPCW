@@ -2,14 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
 
+/// Login and registration screen shown by [AuthGate] when no user is signed in.
+///
+/// Presents a [SegmentedButton] to switch between log-in and sign-up modes.
+/// Validation, loading state, and error messages are all managed locally.
 class AuthScreen extends StatefulWidget {
+  /// Creates an [AuthScreen] backed by [authService].
+  ///
+  /// [firebaseReady] controls the subtitle text shown beneath the app name so
+  /// the user knows whether real Firebase Auth or local fallback is active.
   const AuthScreen({
     super.key,
     required this.authService,
     required this.firebaseReady,
   });
 
+  /// The service used to perform sign-in and sign-up operations.
   final AuthService authService;
+
+  /// Whether Firebase was successfully initialised at startup.
   final bool firebaseReady;
 
   @override
@@ -27,6 +38,8 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isLoading = false;
   String? _errorMessage;
 
+  /// Returns true when the error message suggests the user needs to sign up,
+  /// so that a shortcut button can be shown.
   bool get _showSignUpShortcut {
     if (_isSignUp || _errorMessage == null) {
       return false;
@@ -44,6 +57,11 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
+  /// Validates the form and delegates to [AuthService.signUp] or
+  /// [AuthService.signIn] depending on [_isSignUp].
+  ///
+  /// Sets [_isLoading] during the async call and populates [_errorMessage]
+  /// on failure.
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -78,6 +96,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  /// Switches between log-in and sign-up mode and clears any error message.
   void _switchMode(bool signUp) {
     setState(() {
       _isSignUp = signUp;
