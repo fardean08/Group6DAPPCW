@@ -37,8 +37,8 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
 
   final _destinationController =
       TextEditingController(text: 'Gillingham High Street');
-  final _maxPriceController = TextEditingController(text: '3.00');
-  final _maxDistanceController = TextEditingController(text: '2.00');
+  double _maxPrice = 3.00;
+  double _maxDistance = 2.00;
 
   Destination _destination = const Destination(
     name: 'Gillingham High Street',
@@ -72,8 +72,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
   void dispose() {
     _timer?.cancel();
     _destinationController.dispose();
-    _maxPriceController.dispose();
-    _maxDistanceController.dispose();
     super.dispose();
   }
 
@@ -145,15 +143,12 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
   }
 
   void _applyFilters() {
-    final maxPrice = double.tryParse(_maxPriceController.text) ?? 3.0;
-    final maxDistance = double.tryParse(_maxDistanceController.text) ?? 2.0;
-
     setState(() {
       _results = _parkingService.filterParkingSpaces(
         destination: _destination,
         spaces: _spaces,
-        maxPrice: maxPrice,
-        maxDistanceKm: maxDistance,
+        maxPrice: _maxPrice,
+        maxDistanceKm: _maxDistance,
         type: _selectedType,
         requiresLighting: _requiresLighting,
       );
