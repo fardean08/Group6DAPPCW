@@ -807,6 +807,7 @@ class _FiltersSection extends StatelessWidget {
     required this.onSortChanged,
     required this.favouritesOnly,
     required this.onFavouritesOnlyChanged,
+    required this.onPresetSelected,
   });
 
   final double maxPrice;
@@ -821,6 +822,7 @@ class _FiltersSection extends StatelessWidget {
   final ValueChanged<bool> onLightingChanged;
   final ValueChanged<ParkingSortOrder?> onSortChanged;
   final ValueChanged<bool> onFavouritesOnlyChanged;
+  final ValueChanged<String> onPresetSelected;
 
   @override
   Widget build(BuildContext context) {
