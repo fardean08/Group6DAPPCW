@@ -434,6 +434,11 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                     destination: _destination,
                     isSearching: _isSearching,
                     onSearch: _searchDestination,
+                    recentDestinations: _recentDestinations,
+                    onRecentSelected: (d) {
+                      _destinationController.text = d.name;
+                      _loadDestination(d);
+                    },
                   ),
                   const SizedBox(height: 14),
                   _StatsRow(
