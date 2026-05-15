@@ -159,6 +159,7 @@ class ParkingService {
     required double maxDistanceKm,
     required String type,
     required bool requiresLighting,
+    ParkingSortOrder sortOrder = ParkingSortOrder.distance,
   }) {
     final results = spaces.map((space) {
       final distance = distanceService.calculateDistanceKm(
