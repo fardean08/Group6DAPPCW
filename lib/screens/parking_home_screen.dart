@@ -248,6 +248,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
       _selectedType = 'any';
       _requiresLighting = false;
       _sortOrder = ParkingSortOrder.distance;
+      _favouritesOnly = false;
     });
 
     _applyFilters();
