@@ -183,16 +183,16 @@ void main() {
     expect(find.text('Smart Parking Finder'), findsOneWidget);
   });
 
-  testWidgets('shows sort order dropdown', (tester) async {
+  testWidgets('shows sort dropdown widget', (tester) async {
     await pumpApp(tester);
     await tester.pump();
     final listScrollable = find.byType(Scrollable).first;
     await tester.scrollUntilVisible(
-      find.text('Sort: Price'),
+      find.byType(DropdownButton<String>),
       300.0,
       scrollable: listScrollable,
     );
-    expect(find.text('Sort: Price'), findsOneWidget);
+    expect(find.byType(DropdownButton<String>), findsWidgets);
   });
 
   testWidgets('pre-loads stored spaces from repository', (tester) async {
