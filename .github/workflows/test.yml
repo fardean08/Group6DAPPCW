@@ -33,3 +33,34 @@ jobs:
         with:
           name: coverage-report
           path: coverage/lcov.info
+
+  docs:
+    runs-on: ubuntu-latest
+    # Only publish docs on pushes to main so PRs don't overwrite the live site
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    # Needed so the workflow can write to the gh-pages branch
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.x"
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate API docs with dartdoc
+        run: dart doc --output doc/api
+
+      - name: Publish docs to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: doc/api
+          destination_dir: .
