@@ -755,6 +755,29 @@ class _FiltersSection extends StatelessWidget {
               ],
               onChanged: onTypeChanged,
             ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<ParkingSortOrder>(
+              value: sortOrder,
+              decoration: const InputDecoration(
+                labelText: 'Sort by',
+                border: OutlineInputBorder(),
+              ),
+              items: const [
+                DropdownMenuItem(
+                  value: ParkingSortOrder.distance,
+                  child: Text('Nearest first'),
+                ),
+                DropdownMenuItem(
+                  value: ParkingSortOrder.price,
+                  child: Text('Cheapest first'),
+                ),
+                DropdownMenuItem(
+                  value: ParkingSortOrder.safetyScore,
+                  child: Text('Safest first'),
+                ),
+              ],
+              onChanged: onSortChanged,
+            ),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               value: requiresLighting,
