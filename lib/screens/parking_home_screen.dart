@@ -414,6 +414,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                     maxDistance: _maxDistance,
                     selectedType: _selectedType,
                     requiresLighting: _requiresLighting,
+                    sortOrder: _sortOrder,
                     onPriceChanged: (v) {
                       setState(() => _maxPrice = v);
                       _applyFilters();
@@ -428,6 +429,10 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                     },
                     onLightingChanged: (value) {
                       setState(() => _requiresLighting = value);
+                      _applyFilters();
+                    },
+                    onSortChanged: (value) {
+                      setState(() => _sortOrder = value ?? ParkingSortOrder.distance);
                       _applyFilters();
                     },
                   ),
