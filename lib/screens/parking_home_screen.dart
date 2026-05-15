@@ -630,6 +630,31 @@ class _DestinationSearch extends StatelessWidget {
               'Current destination: ${destination.name}',
               textAlign: TextAlign.center,
             ),
+            if (recentDestinations.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Recent',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: recentDestinations.map((d) {
+                  return ActionChip(
+                    label: Text(d.name.split(',').first.trim()),
+                    onPressed: () => onRecentSelected(d),
+                  );
+                }).toList(),
+              ),
+            ],
           ],
         ),
       ),
