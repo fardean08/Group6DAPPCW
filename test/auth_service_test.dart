@@ -38,14 +38,17 @@ void main() {
         expect(user.uid, isNotEmpty);
       });
 
-      test('emits the new user on authStateChanges after sign-up', () async {
+      test('authStateChanges reflects signed-in user after sign-up', () async {
+        // Listen before the action so we catch the emitted event
+        final future = service.authStateChanges.first;
+
         await service.signUp(
           name: 'Jane Smith',
           email: 'jane@example.com',
           password: 'securepass',
         );
 
-        final user = await service.authStateChanges.first;
+        final user = await future;
         expect(user, isNotNull);
         expect(user!.email, 'jane@example.com');
       });
@@ -101,10 +104,10 @@ void main() {
       });
     });
 
- // ---------------------------------------------------------------
+    // ---------------------------------------------------------------
     // Sign-in
     // ---------------------------------------------------------------
- 
+
     group('signIn', () {
       setUp(() async {
         await service.signUp(
@@ -114,27 +117,31 @@ void main() {
         );
         await service.signOut();
       });
- 
+
       test('returns AppUser with correct fields on valid credentials', () async {
         final user = await service.signIn(
           email: 'jane@example.com',
           password: 'securepass',
         );
- 
+
         expect(user.name, 'Jane Smith');
         expect(user.email, 'jane@example.com');
       });
- 
-      test('emits user on authStateChanges after sign-in', () async {
+
+      test('authStateChanges reflects signed-in user after sign-in', () async {
+        // Listen before the action so we catch the emitted event
+        final future = service.authStateChanges.first;
+
         await service.signIn(
           email: 'jane@example.com',
           password: 'securepass',
         );
- 
-        final user = await service.authStateChanges.first;
+
+        final user = await future;
         expect(user, isNotNull);
+        expect(user!.email, 'jane@example.com');
       });
- 
+
       test('throws on unregistered email', () async {
         expect(
           () => service.signIn(
@@ -144,7 +151,7 @@ void main() {
           throwsA(isA<Exception>()),
         );
       });
- 
+
       test('throws on wrong password', () async {
         expect(
           () => service.signIn(
@@ -154,52 +161,53 @@ void main() {
           throwsA(isA<Exception>()),
         );
       });
- 
+
       test('sign-in is case-insensitive for email', () async {
         final user = await service.signIn(
           email: 'JANE@EXAMPLE.COM',
           password: 'securepass',
         );
- 
+
         expect(user.email, 'jane@example.com');
       });
     });
- 
+
     // ---------------------------------------------------------------
     // Sign-out
     // ---------------------------------------------------------------
- 
+
     group('signOut', () {
-      test('emits null on authStateChanges after sign-out', () async {
+      test('authStateChanges reflects null after sign-out', () async {
         await service.signUp(
           name: 'Jane Smith',
           email: 'jane@example.com',
           password: 'securepass',
         );
- 
+
+        // Listen before sign-out to catch the null emission
+        final future = service.authStateChanges.first;
         await service.signOut();
- 
-        final user = await service.authStateChanges.first;
+
+        final user = await future;
         expect(user, isNull);
       });
- 
+
       test('user can sign in again after sign-out', () async {
         await service.signUp(
           name: 'Jane Smith',
           email: 'jane@example.com',
           password: 'securepass',
         );
- 
+
         await service.signOut();
- 
+
         final user = await service.signIn(
           email: 'jane@example.com',
           password: 'securepass',
         );
- 
+
         expect(user.name, 'Jane Smith');
       });
     });
   });
 }
- 
