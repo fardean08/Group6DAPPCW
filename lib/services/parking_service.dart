@@ -199,7 +199,14 @@ class ParkingService {
       return true;
     }).toList();
 
-    results.sort((a, b) => a.walkingDistanceKm.compareTo(b.walkingDistanceKm));
+    results.sort((a, b) => switch (sortOrder) {
+      ParkingSortOrder.distance =>
+          a.walkingDistanceKm.compareTo(b.walkingDistanceKm),
+      ParkingSortOrder.price =>
+          a.space.pricePerHour.compareTo(b.space.pricePerHour),
+      ParkingSortOrder.safetyScore =>
+          b.space.safetyScore.compareTo(a.space.safetyScore),
+    });
     return results;
   }
 
