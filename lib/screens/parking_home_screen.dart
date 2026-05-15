@@ -787,6 +787,8 @@ class _FiltersSection extends StatelessWidget {
     required this.onTypeChanged,
     required this.onLightingChanged,
     required this.onSortChanged,
+    required this.favouritesOnly,
+    required this.onFavouritesOnlyChanged,
   });
 
   final double maxPrice;
@@ -794,11 +796,13 @@ class _FiltersSection extends StatelessWidget {
   final String selectedType;
   final bool requiresLighting;
   final ParkingSortOrder sortOrder;
+  final bool favouritesOnly;
   final ValueChanged<double> onPriceChanged;
   final ValueChanged<double> onDistanceChanged;
   final ValueChanged<String?> onTypeChanged;
   final ValueChanged<bool> onLightingChanged;
   final ValueChanged<ParkingSortOrder?> onSortChanged;
+  final ValueChanged<bool> onFavouritesOnlyChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -888,6 +892,13 @@ class _FiltersSection extends StatelessWidget {
               value: requiresLighting,
               title: const Text('Lighting required'),
               onChanged: onLightingChanged,
+            ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              value: favouritesOnly,
+              title: const Text('Favourites only'),
+              secondary: const Icon(Icons.favorite),
+              onChanged: onFavouritesOnlyChanged,
             ),
           ],
         ),
