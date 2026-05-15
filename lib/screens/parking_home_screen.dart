@@ -70,6 +70,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
   @override
   void initState() {
     super.initState();
+    _loadFavourites();
     _loadRecents();
     _loadDestination(_destination);
 
