@@ -152,6 +152,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
         maxDistanceKm: _maxDistance,
         type: _selectedType,
         requiresLighting: _requiresLighting,
+        sortOrder: _sortOrder,
       );
     });
   }
