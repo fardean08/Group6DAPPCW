@@ -34,7 +34,7 @@ class SmartParkingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthService authService =
-        firebaseReady ? FirebaseAuthService() : LocalAuthService();
+        firebaseReady ? FirebaseAuthService() : PersistentLocalAuthService();
 
     final ParkingRepository parkingRepository = firebaseReady
         ? FirestoreParkingRepository()
