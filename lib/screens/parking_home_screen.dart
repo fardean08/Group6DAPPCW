@@ -184,6 +184,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
       _maxDistance = 2.00;
       _selectedType = 'any';
       _requiresLighting = false;
+      _sortOrder = ParkingSortOrder.distance;
     });
 
     _applyFilters();
