@@ -583,12 +583,16 @@ class _DestinationSearch extends StatelessWidget {
     required this.destination,
     required this.isSearching,
     required this.onSearch,
+    required this.recentDestinations,
+    required this.onRecentSelected,
   });
 
   final TextEditingController controller;
   final Destination destination;
   final bool isSearching;
   final VoidCallback onSearch;
+  final List<Destination> recentDestinations;
+  final ValueChanged<Destination> onRecentSelected;
 
   @override
   Widget build(BuildContext context) {
