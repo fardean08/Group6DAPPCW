@@ -187,3 +187,81 @@ class LocalAuthService implements AuthService {
     _controller.add(null);
   }
 }
+
+class PersistentLocalAuthService implements AuthService {
+  static const _usersKey = 'local_users';
+  static const _sessionKey = 'local_session';
+
+  final _controller = StreamController<AppUser?>.broadcast();
+  final Map<String, ({String name, String password})> _users = {};
+  AppUser? _currentUser;
+
+  PersistentLocalAuthService() {
+    _load();
+  }
+
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_usersKey);
+    if (raw != null) {
+      final map = jsonDecode(raw) as Map<String, dynamic>;
+      for (final e in map.entries) {
+        final v = e.value as Map<String, dynamic>;
+        _users[e.key] = (name: v['name'] as String, password: v['password'] as String);
+      }
+    }
+    final email = prefs.getString(_sessionKey);
+    if (email != null && _users.containsKey(email)) {
+      _currentUser = AppUser(uid: email, email: email, name: _users[email]!.name);
+    }
+    _controller.add(_currentUser);
+  }
+
+  Future<void> _save({required String? session}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_usersKey, jsonEncode({
+      for (final e in _users.entries)
+        e.key: {'name': e.value.name, 'password': e.value.password},
+    }));
+    if (session == null) {
+      await prefs.remove(_sessionKey);
+    } else {
+      await prefs.setString(_sessionKey, session);
+    }
+  }
+
+  @override
+  Stream<AppUser?> get authStateChanges => _controller.stream;
+
+  @override
+  Future<AppUser> signUp({required String name, required String email, required String password}) async {
+    final key = email.toLowerCase();
+    if (_users.containsKey(key)) {
+      throw Exception('An account with this email already exists.');
+    }
+    _users[key] = (name: name, password: password);
+    _currentUser = AppUser(uid: key, email: key, name: name);
+    await _save(session: key);
+    _controller.add(_currentUser);
+    return _currentUser!;
+  }
+
+  @override
+  Future<AppUser> signIn({required String email, required String password}) async {
+    final key = email.toLowerCase();
+    final user = _users[key];
+    if (user == null) throw Exception('No account exists for this email. Please sign up first.');
+    if (user.password != password) throw Exception('Incorrect email or password.');
+    _currentUser = AppUser(uid: key, email: key, name: user.name);
+    await _save(session: key);
+    _controller.add(_currentUser);
+    return _currentUser!;
+  }
+
+  @override
+  Future<void> signOut() async {
+    _currentUser = null;
+    await _save(session: null);
+    _controller.add(null);
+  }
+}
