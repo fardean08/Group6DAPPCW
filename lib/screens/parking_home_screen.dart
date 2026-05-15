@@ -241,6 +241,23 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     _applyFilters();
   }
 
+  void _applyPreset(String preset) {
+    setState(() {
+      switch (preset) {
+        case 'evening':
+          _requiresLighting = true;
+          _sortOrder = ParkingSortOrder.safetyScore;
+        case 'cheap':
+          _maxPrice = 1.50;
+          _sortOrder = ParkingSortOrder.price;
+        case 'accessible':
+          _selectedType = 'disabled';
+          _maxDistance = 5.0;
+      }
+    });
+    _applyFilters();
+  }
+
   void _resetFilters() {
     setState(() {
       _maxPrice = 3.00;
