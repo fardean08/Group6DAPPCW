@@ -43,6 +43,18 @@ class ParkingCard extends StatelessWidget {
                   availableSpaces: space.availableSpaces,
                   totalSpaces: space.totalSpaces,
                 ),
+                if (onFavouriteToggle != null) ...[
+                  const SizedBox(width: 4),
+                  IconButton(
+                    icon: Icon(
+                      isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavourite ? Colors.red.shade400 : null,
+                    ),
+                    onPressed: onFavouriteToggle,
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                  ),
+                ],
               ],
             ),
             const SizedBox(height: 8),
