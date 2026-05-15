@@ -125,13 +125,16 @@ class ParkingService {
       ),
     ];
 
+    // Offsets are graduated so each space sits at a meaningfully different
+    // walking distance (~0.25, 0.65, 1.1, 1.7, 2.2, 3.0 km). This ensures
+    // that raising the distance filter progressively reveals more results.
     final offsets = <({double lat, double lng})>[
-      (lat: 0.0018, lng: -0.0028),
-      (lat: -0.0012, lng: 0.0021),
-      (lat: 0.0025, lng: 0.0016),
-      (lat: -0.0031, lng: -0.0019),
-      (lat: 0.0009, lng: 0.0033),
-      (lat: -0.0022, lng: 0.0008),
+      (lat: 0.0018, lng: -0.0021), // ~0.25 km
+      (lat: 0.0040, lng: 0.0070),  // ~0.65 km
+      (lat: 0.0080, lng: -0.0100), // ~1.1 km
+      (lat: -0.0120, lng: 0.0150), // ~1.7 km
+      (lat: 0.0160, lng: 0.0180),  // ~2.2 km
+      (lat: -0.0220, lng: 0.0250), // ~3.0 km
     ];
 
     return baseTemplates.asMap().entries.map((entry) {
