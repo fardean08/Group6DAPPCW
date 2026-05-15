@@ -59,6 +59,10 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
 
   static const _recentKey = 'recent_destinations';
   List<Destination> _recentDestinations = [];
+
+  static const _favKey = 'favourite_spaces';
+  Set<String> _favouriteIds = {};
+  bool _favouritesOnly = false;
   bool _isLoading = true;
   bool _isSearching = false;
   DateTime _lastUpdated = DateTime.now();
@@ -80,6 +84,24 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     _timer?.cancel();
     _destinationController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadFavourites() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_favKey);
+    if (raw == null || !mounted) return;
+    setState(() {
+      _favouriteIds = (jsonDecode(raw) as List).cast<String>().toSet();
+    });
+  }
+
+  Future<void> _toggleFavourite(String id) async {
+    final updated = Set<String>.from(_favouriteIds);
+    if (updated.contains(id)) updated.remove(id) else updated.add(id);
+    setState(() => _favouriteIds = updated);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_favKey, jsonEncode(updated.toList()));
+    _applyFilters();
   }
 
   Future<void> _loadRecents() async {
