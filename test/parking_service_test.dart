@@ -89,5 +89,87 @@ void main() {
 
       expect(refreshed.first.availableSpaces, 0);
     });
+
+    test('refreshAvailability increments a space that was previously decreasing', () {
+      final spaces = service.generateParkingSpaces(destination);
+      // availableSpaces < previousAvailableSpaces → was decreasing → should tick up
+      final decreasing = spaces.first.copyWith(
+        availableSpaces: 10,
+        previousAvailableSpaces: 15,
+      );
+
+      final refreshed = service.refreshAvailability([decreasing]);
+
+      expect(refreshed.first.previousAvailableSpaces, 10);
+      expect(refreshed.first.availableSpaces, 11);
+    });
+
+    test('filters out spaces beyond maxDistanceKm', () {
+      final spaces = service.generateParkingSpaces(destination);
+
+      // All generated spaces are within ~0.5 km of the destination.
+      // Setting maxDistanceKm to 0 should exclude every space.
+      final results = service.filterParkingSpaces(
+        destination: destination,
+        spaces: spaces,
+        maxPrice: 10,
+        maxDistanceKm: 0,
+        type: 'any',
+        requiresLighting: false,
+      );
+
+      expect(results, isEmpty);
+    });
+
+    test('filters out spaces without lighting when requiresLighting is true', () {
+      final spaces = service.generateParkingSpaces(destination);
+
+      final results = service.filterParkingSpaces(
+        destination: destination,
+        spaces: spaces,
+        maxPrice: 10,
+        maxDistanceKm: 5,
+        type: 'any',
+        requiresLighting: true,
+      );
+
+      expect(results.every((r) => r.space.hasLighting), true);
+    });
+
+    test('spacesWithNewAvailability returns only spaces that gained spaces', () {
+      final gained = service.generateParkingSpaces(destination).first.copyWith(
+        availableSpaces: 20,
+        previousAvailableSpaces: 10,
+      );
+      final lost = service.generateParkingSpaces(destination).last.copyWith(
+        availableSpaces: 5,
+        previousAvailableSpaces: 10,
+      );
+
+      final result = service.spacesWithNewAvailability([gained, lost]);
+
+      expect(result, hasLength(1));
+      expect(result.first.availableSpaces, 20);
+    });
+
+    test('spacesWithNewAvailability returns empty when no spaces improved', () {
+      final spaces = service.generateParkingSpaces(destination).map((s) =>
+        s.copyWith(availableSpaces: 5, previousAvailableSpaces: 10),
+      ).toList();
+
+      final result = service.spacesWithNewAvailability(spaces);
+
+      expect(result, isEmpty);
+    });
+
+    test('spacesWithNewAvailability returns empty for equal availability', () {
+      final spaces = service.generateParkingSpaces(destination).map((s) =>
+        s.copyWith(availableSpaces: 10, previousAvailableSpaces: 10),
+      ).toList();
+
+      final result = service.spacesWithNewAvailability(spaces);
+
+      expect(result, isEmpty);
+    });
   });
 }
