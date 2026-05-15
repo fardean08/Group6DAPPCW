@@ -197,4 +197,94 @@ void main() {
       expect(restored.notes, reference.notes);
     });
   });
+ // ---------------------------------------------------------------
+  // copyWith
+  // ---------------------------------------------------------------
  
+  group('ParkingSpace.copyWith', () {
+    test('returns an identical copy when no arguments are provided', () {
+      final copy = reference.copyWith();
+ 
+      expect(copy.id, reference.id);
+      expect(copy.name, reference.name);
+      expect(copy.latitude, reference.latitude);
+      expect(copy.longitude, reference.longitude);
+      expect(copy.pricePerHour, reference.pricePerHour);
+      expect(copy.availableSpaces, reference.availableSpaces);
+      expect(copy.type, reference.type);
+      expect(copy.hasLighting, reference.hasLighting);
+    });
+ 
+    test('updates only availableSpaces when specified', () {
+      final copy = reference.copyWith(availableSpaces: 99);
+ 
+      expect(copy.availableSpaces, 99);
+      expect(copy.name, reference.name);
+      expect(copy.pricePerHour, reference.pricePerHour);
+    });
+ 
+    test('updates only name when specified', () {
+      final copy = reference.copyWith(name: 'New Name');
+ 
+      expect(copy.name, 'New Name');
+      expect(copy.availableSpaces, reference.availableSpaces);
+      expect(copy.latitude, reference.latitude);
+    });
+ 
+    test('updates only hasLighting when specified', () {
+      final copy = reference.copyWith(hasLighting: false);
+ 
+      expect(copy.hasLighting, false);
+      expect(copy.name, reference.name);
+    });
+ 
+    test('updates multiple fields simultaneously', () {
+      final copy = reference.copyWith(
+        availableSpaces: 0,
+        pricePerHour: 5.00,
+        type: 'wide',
+        hasLighting: false,
+      );
+ 
+      expect(copy.availableSpaces, 0);
+      expect(copy.pricePerHour, 5.00);
+      expect(copy.type, 'wide');
+      expect(copy.hasLighting, false);
+      // Unchanged fields stay the same
+      expect(copy.name, reference.name);
+      expect(copy.id, reference.id);
+    });
+ 
+    test('original object is unchanged after copyWith', () {
+      reference.copyWith(
+        availableSpaces: 0,
+        name: 'Changed',
+        pricePerHour: 99.99,
+      );
+ 
+      expect(reference.availableSpaces, 34);
+      expect(reference.name, 'Central Car Park');
+      expect(reference.pricePerHour, 2.80);
+    });
+ 
+    test('copyWith can update coordinates', () {
+      final copy = reference.copyWith(
+        latitude: 51.5074,
+        longitude: -0.1278,
+      );
+ 
+      expect(copy.latitude, 51.5074);
+      expect(copy.longitude, -0.1278);
+      expect(copy.name, reference.name);
+    });
+ 
+    test('copyWith previousAvailableSpaces updates independently of availableSpaces', () {
+      final copy = reference.copyWith(
+        previousAvailableSpaces: 50,
+      );
+ 
+      expect(copy.previousAvailableSpaces, 50);
+      expect(copy.availableSpaces, reference.availableSpaces);
+    });
+  });
+}
