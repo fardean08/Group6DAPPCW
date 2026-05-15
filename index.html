@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="smart_parking_finder_flutter API docs, for the Dart programming language.">
+  <title>smart_parking_finder_flutter - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">smart_parking_finder_flutter package</li>
+  </ol>
+  <div class="self-name">smart_parking_finder_flutter</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="smart-parking-finder---flutter--firebase">Smart Parking Finder - Flutter + Firebase</h1>
+<p>This is a Flutter/Firebase version of the Smart Parking Finder prototype.</p>
+<p>It includes:</p>
+<ul>
+<li>Firebase Authentication login</li>
+<li>Firebase Authentication sign up</li>
+<li>Firestore parking-space storage</li>
+<li>destination search</li>
+<li>real map using OpenStreetMap through <code>flutter_map</code></li>
+<li>parking markers on the map</li>
+<li>price, distance, type, and lighting filters</li>
+<li>parking details screen</li>
+<li>availability refresh every 5 seconds</li>
+<li>availability alerts</li>
+<li>Google Maps navigation link</li>
+<li>automated Flutter unit tests</li>
+<li>GitHub Actions workflow</li>
+</ul>
+<p>The app also has a local fallback mode, so it can still open if Firebase is not configured yet. For the real coursework demo, configure Firebase and enable Email/Password Authentication.</p>
+<hr>
+<h2 id="how-to-create-the-flutter-project">How to create the Flutter project</h2>
+<p>Run:</p>
+<pre class="language-bash"><code class="language-bash">flutter create smart_parking_finder_flutter
+</code></pre>
+<p>Then copy the files from this pack into the project folder, replacing existing files when asked.</p>
+<p>Then run:</p>
+<pre class="language-bash"><code class="language-bash">cd smart_parking_finder_flutter
+flutter pub get
+</code></pre>
+<hr>
+<h2 id="firebase-setup">Firebase setup</h2>
+<ol>
+<li>Go to Firebase Console and create a project.</li>
+<li>Enable <strong>Authentication &gt; Sign-in method &gt; Email/Password</strong>.</li>
+<li>Enable <strong>Firestore Database</strong>.</li>
+<li>Install FlutterFire CLI:</li>
+</ol>
+<pre class="language-bash"><code class="language-bash">dart pub global activate flutterfire_cli
+</code></pre>
+<ol start="5">
+<li>Configure Firebase:</li>
+</ol>
+<pre class="language-bash"><code class="language-bash">flutterfire configure
+</code></pre>
+<p>This will generate a real <code>lib/firebase_options.dart</code>.</p>
+<p>This code pack includes a placeholder <code>firebase_options.dart</code> so the code is complete, but you should replace it using <code>flutterfire configure</code>.</p>
+<hr>
+<h2 id="run-the-app">Run the app</h2>
+<p>For Chrome:</p>
+<pre class="language-bash"><code class="language-bash">flutter run -d chrome
+</code></pre>
+<p>For Android emulator:</p>
+<pre class="language-bash"><code class="language-bash">flutter run
+</code></pre>
+<hr>
+<h2 id="run-tests">Run tests</h2>
+<pre class="language-bash"><code class="language-bash">flutter test --coverage
+</code></pre>
+<hr>
+<h2 id="push-to-github">Push to GitHub</h2>
+<pre class="language-bash"><code class="language-bash">git init
+git add .
+git commit -m "Initial Flutter Firebase Smart Parking Finder"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/smart-parking-finder-flutter.git
+git push -u origin main
+</code></pre>
+<hr>
+<h2 id="coursework-report-wording">Coursework report wording</h2>
+<p>You can write:</p>
+<blockquote>
+<p>The final system was implemented in Flutter with Firebase Authentication and Firestore. Firebase Authentication supports login and sign-up, while Firestore stores the generated parking-space data for each searched destination. The Flutter app provides the presentation layer, the service classes provide the application logic layer, and Firebase/Firestore provide the data layer. A local fallback mode was also kept to make development and testing easier if Firebase configuration is unavailable.</p>
+</blockquote>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="firebase_options">
+  <span class="name"><a href="firebase_options/">firebase_options</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="main">
+  <span class="name"><a href="main/">main</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="app_user">
+  <span class="name"><a href="models_app_user/">models/app_user</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="destination">
+  <span class="name"><a href="models_destination/">models/destination</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="parking_space">
+  <span class="name"><a href="models_parking_space/">models/parking_space</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="parking_repository">
+  <span class="name"><a href="repositories_parking_repository/">repositories/parking_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="auth_gate">
+  <span class="name"><a href="screens_auth_gate/">screens/auth_gate</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="auth_screen">
+  <span class="name"><a href="screens_auth_screen/">screens/auth_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="parking_home_screen">
+  <span class="name"><a href="screens_parking_home_screen/">screens/parking_home_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="auth_service">
+  <span class="name"><a href="services_auth_service/">services/auth_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="distance_service">
+  <span class="name"><a href="services_distance_service/">services/distance_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="geocoding_service">
+  <span class="name"><a href="services_geocoding_service/">services/geocoding_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="parking_service">
+  <span class="name"><a href="services_parking_service/">services/parking_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="parking_card">
+  <span class="name"><a href="widgets_parking_card/">widgets/parking_card</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="parking_map">
+  <span class="name"><a href="widgets_parking_map/">widgets/parking_map</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">smart_parking_finder_flutter package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">smart_parking_finder_flutter</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="firebase_options/">firebase_options</a></li>
+      <li><a href="main/">main</a></li>
+      <li><a href="models_app_user/">models/app_user</a></li>
+      <li><a href="models_destination/">models/destination</a></li>
+      <li><a href="models_parking_space/">models/parking_space</a></li>
+      <li><a href="repositories_parking_repository/">repositories/parking_repository</a></li>
+      <li><a href="screens_auth_gate/">screens/auth_gate</a></li>
+      <li><a href="screens_auth_screen/">screens/auth_screen</a></li>
+      <li><a href="screens_parking_home_screen/">screens/parking_home_screen</a></li>
+      <li><a href="services_auth_service/">services/auth_service</a></li>
+      <li><a href="services_distance_service/">services/distance_service</a></li>
+      <li><a href="services_geocoding_service/">services/geocoding_service</a></li>
+      <li><a href="services_parking_service/">services/parking_service</a></li>
+      <li><a href="widgets_parking_card/">widgets/parking_card</a></li>
+      <li><a href="widgets_parking_map/">widgets/parking_map</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    smart_parking_finder_flutter
+      1.0.0+1
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the generateParkingSpaces method from the ParkingService class, for the Dart programming language.">
+  <title>generateParkingSpaces method - ParkingService class - parking_service library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">smart_parking_finder_flutter</a></li>
+    <li><a href="../../services_parking_service/">services&#47;parking_service.dart</a></li>
+    <li><a href="../../services_parking_service/ParkingService-class.html">ParkingService</a></li>
+    <li class="self-crumb">generateParkingSpaces method</li>
+  </ol>
+  <div class="self-name">generateParkingSpaces</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="services_parking_service&#47;ParkingService-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">generateParkingSpaces</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../models_parking_space/ParkingSpace-class.html">ParkingSpace</a></span>&gt;</span></span>
+<span class="name ">generateParkingSpaces</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="generateParkingSpaces-param-destination"><span class="type-annotation"><a href="../../models_destination/Destination-class.html">Destination</a></span> <span class="parameter-name">destination</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Generates six parking spaces positioned around <code>destination</code> at
+graduated distances (~0.25 km to ~3.0 km).</p>
+<p>Each space is based on a fixed template (type, price, capacity, etc.)
+with its <a href="../../models_parking_space/ParkingSpace/name.html">ParkingSpace.name</a> prefixed by the first segment of the
+destination name and its coordinates offset from the destination centre.
+This ensures that adjusting the distance filter progressively reveals
+additional results during a demo.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">List&lt;ParkingSpace&gt; generateParkingSpaces(Destination destination) {
+  final baseTemplates = &lt;ParkingSpace&gt;[
+    const ParkingSpace(
+      id: &#39;p1&#39;,
+      name: &#39;Central Car Park&#39;,
+      latitude: 0,
+      longitude: 0,
+      pricePerHour: 2.80,
+      availableSpaces: 34,
+      previousAvailableSpaces: 30,
+      totalSpaces: 120,
+      type: &#39;standard&#39;,
+      hasLighting: true,
+      safetyScore: 4,
+      openingHours: &#39;24 hours&#39;,
+      restrictions: &#39;Maximum stay 6 hours&#39;,
+      bayWidth: &#39;standard&#39;,
+      notes: &#39;Close to the main destination area.&#39;,
+    ),
+    const ParkingSpace(
+      id: &#39;p2&#39;,
+      name: &#39;Station Parking&#39;,
+      latitude: 0,
+      longitude: 0,
+      pricePerHour: 1.60,
+      availableSpaces: 12,
+      previousAvailableSpaces: 15,
+      totalSpaces: 60,
+      type: &#39;standard&#39;,
+      hasLighting: true,
+      safetyScore: 5,
+      openingHours: &#39;07:00-22:00&#39;,
+      restrictions: &#39;Permit recommended during peak times&#39;,
+      bayWidth: &#39;standard&#39;,
+      notes: &#39;Good value option near public transport and offices.&#39;,
+    ),
+    const ParkingSpace(
+      id: &#39;p3&#39;,
+      name: &#39;Accessible Civic Parking&#39;,
+      latitude: 0,
+      longitude: 0,
+      pricePerHour: 2.10,
+      availableSpaces: 7,
+      previousAvailableSpaces: 4,
+      totalSpaces: 35,
+      type: &#39;disabled&#39;,
+      hasLighting: true,
+      safetyScore: 4,
+      openingHours: &#39;08:00-20:00&#39;,
+      restrictions: &#39;Disabled badge required for accessible bays&#39;,
+      bayWidth: &#39;wide&#39;,
+      notes: &#39;Includes accessible bays near public buildings.&#39;,
+    ),
+    const ParkingSpace(
+      id: &#39;p4&#39;,
+      name: &#39;Outer Zone Wide Bays&#39;,
+      latitude: 0,
+      longitude: 0,
+      pricePerHour: 1.20,
+      availableSpaces: 0,
+      previousAvailableSpaces: 0,
+      totalSpaces: 80,
+      type: &#39;wide&#39;,
+      hasLighting: false,
+      safetyScore: 3,
+      openingHours: &#39;24 hours&#39;,
+      restrictions: &#39;Busy during weekends&#39;,
+      bayWidth: &#39;wide&#39;,
+      notes: &#39;Cheaper but further from the main destination.&#39;,
+    ),
+    const ParkingSpace(
+      id: &#39;p5&#39;,
+      name: &#39;Commercial Road Parking&#39;,
+      latitude: 0,
+      longitude: 0,
+      pricePerHour: 2.90,
+      availableSpaces: 18,
+      previousAvailableSpaces: 20,
+      totalSpaces: 50,
+      type: &#39;standard&#39;,
+      hasLighting: true,
+      safetyScore: 4,
+      openingHours: &#39;06:00-23:00&#39;,
+      restrictions: &#39;No overnight parking&#39;,
+      bayWidth: &#39;standard&#39;,
+      notes: &#39;Further from centre, close to shops and public transport.&#39;,
+    ),
+    const ParkingSpace(
+      id: &#39;p6&#39;,
+      name: &#39;Secure Wide Bay Parking&#39;,
+      latitude: 0,
+      longitude: 0,
+      pricePerHour: 2.40,
+      availableSpaces: 6,
+      previousAvailableSpaces: 2,
+      totalSpaces: 28,
+      type: &#39;wide&#39;,
+      hasLighting: true,
+      safetyScore: 5,
+      openingHours: &#39;08:00-21:00&#39;,
+      restrictions: &#39;Wide bays only, no overnight parking&#39;,
+      bayWidth: &#39;wide&#39;,
+      notes: &#39;Suitable for drivers who prefer wider spaces.&#39;,
+    ),
+  ];
+
+  &#47;&#47; Offsets are graduated so each space sits at a meaningfully different
+  &#47;&#47; walking distance (~0.25, 0.65, 1.1, 1.7, 2.2, 3.0 km). This ensures
+  &#47;&#47; that raising the distance filter progressively reveals more results.
+  final offsets = &lt;({double lat, double lng})&gt;[
+    (lat: 0.0018, lng: -0.0021), &#47;&#47; ~0.25 km
+    (lat: 0.0040, lng: 0.0070),  &#47;&#47; ~0.65 km
+    (lat: 0.0080, lng: -0.0100), &#47;&#47; ~1.1 km
+    (lat: -0.0120, lng: 0.0150), &#47;&#47; ~1.7 km
+    (lat: 0.0160, lng: 0.0180),  &#47;&#47; ~2.2 km
+    (lat: -0.0220, lng: 0.0250), &#47;&#47; ~3.0 km
+  ];
+
+  return baseTemplates.asMap().entries.map((entry) {
+    final index = entry.key;
+    final base = entry.value;
+    final offset = offsets[index];
+
+    return base.copyWith(
+      name: &#39;${_shortDestinationName(destination.name)} ${base.name}&#39;,
+      latitude: destination.latitude + offset.lat,
+      longitude: destination.longitude + offset.lng,
+    );
+  }).toList();
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">smart_parking_finder_flutter</a></li>
+    <li><a href="../../services_parking_service/">parking_service</a></li>
+    <li><a href="../../services_parking_service/ParkingService-class.html">ParkingService</a></li>
+    <li class="self-crumb">generateParkingSpaces method</li>
+</ol>
+
+    <h5>ParkingService class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    smart_parking_finder_flutter
+      1.0.0+1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
