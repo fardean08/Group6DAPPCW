@@ -53,6 +53,11 @@ class ParkingCard extends StatelessWidget {
               'Lighting: ${space.hasLighting ? 'Yes' : 'No'} • '
               'Safety: ${space.safetyScore}/5',
             ),
+            const SizedBox(height: 10),
+            _OccupancyBar(
+              availableSpaces: space.availableSpaces,
+              totalSpaces: space.totalSpaces,
+            ),
             const SizedBox(height: 12),
             Wrap(
               spacing: 10,
