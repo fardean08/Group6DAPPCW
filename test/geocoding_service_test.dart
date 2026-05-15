@@ -140,5 +140,29 @@ void main() {
       expect(destination.latitude, isNegative);
       expect(destination.longitude, isPositive);
     });
+
+    test('ignores extra fields in the response and returns correct Destination',
+        () async {
+      final client = _FakeHttpClient(
+        statusCode: 200,
+        body: jsonEncode([
+          {
+            'display_name': 'Portsmouth Guildhall, Portsmouth, England',
+            'lat': '50.7984',
+            'lon': '-1.0911',
+            'place_id': 12345,
+            'osm_type': 'way',
+            'importance': 0.65,
+          }
+        ]),
+      );
+      final service = GeocodingService(client: client);
+      final destination =
+          await service.searchDestination('Portsmouth Guildhall');
+
+      expect(destination.name, 'Portsmouth Guildhall, Portsmouth, England');
+      expect(destination.latitude, closeTo(50.7984, 0.0001));
+      expect(destination.longitude, closeTo(-1.0911, 0.0001));
+    });
   });
 }
