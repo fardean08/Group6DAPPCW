@@ -15,7 +15,13 @@ import '../services/parking_service.dart';
 import '../widgets/parking_card.dart';
 import '../widgets/parking_map.dart';
 
+/// Main screen shown after the user signs in.
+///
+/// Orchestrates destination search, parking-space generation, filter controls,
+/// live availability refresh (every 30 seconds via [Timer.periodic]), and
+/// favourite management. All state is held in [_ParkingHomeScreenState].
 class ParkingHomeScreen extends StatefulWidget {
+  /// Creates a [ParkingHomeScreen] for [user].
   const ParkingHomeScreen({
     super.key,
     required this.user,
@@ -24,9 +30,16 @@ class ParkingHomeScreen extends StatefulWidget {
     required this.firebaseReady,
   });
 
+  /// The currently signed-in user, shown in the app bar.
   final AppUser user;
+
+  /// Used to sign the user out when the logout button is tapped.
   final AuthService authService;
+
+  /// Repository used to fetch and persist parking spaces per destination.
   final ParkingRepository repository;
+
+  /// Whether Firebase is available; forwarded to the hero section subtitle.
   final bool firebaseReady;
 
   @override
@@ -87,6 +100,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     super.dispose();
   }
 
+  /// Reads the persisted set of favourite space IDs from [SharedPreferences].
   Future<void> _loadFavourites() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_favKey);
@@ -96,6 +110,8 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     });
   }
 
+  /// Adds [id] to favourites if absent, removes it if present, then persists
+  /// the updated set and re-applies filters.
   Future<void> _toggleFavourite(String id) async {
     final updated = Set<String>.from(_favouriteIds);
     if (updated.contains(id)) { updated.remove(id); } else { updated.add(id); }
@@ -105,6 +121,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     _applyFilters();
   }
 
+  /// Reads the persisted list of recent destinations from [SharedPreferences].
   Future<void> _loadRecents() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_recentKey);
@@ -119,6 +136,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     });
   }
 
+  /// Prepends [destination] to the recent list (max 5) and persists it.
   Future<void> _addToRecents(Destination destination) async {
     final updated = [
       destination,
@@ -132,6 +150,11 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     ]));
   }
 
+  /// Fetches or generates parking spaces for [destination], persists them,
+  /// and triggers [_applyFilters].
+  ///
+  /// Fetches from [ParkingRepository] first; generates via [ParkingService] if
+  /// the repository returns an empty list (first visit to this destination).
   Future<void> _loadDestination(Destination destination) async {
     setState(() {
       _isLoading = true;
@@ -173,6 +196,8 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     _applyFilters();
   }
 
+  /// Geocodes the text in [_destinationController] using [GeocodingService]
+  /// and loads the resulting destination.
   Future<void> _searchDestination() async {
     final query = _destinationController.text.trim();
 
@@ -200,6 +225,8 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     }
   }
 
+  /// Re-runs [ParkingService.filterParkingSpaces] with the current filter
+  /// values and updates [_results].
   void _applyFilters() {
     setState(() {
       var results = _parkingService.filterParkingSpaces(
@@ -220,6 +247,11 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     });
   }
 
+  /// Simulates a live availability update via [ParkingService.refreshAvailability],
+  /// persists the new values, and triggers [_applyFilters].
+  ///
+  /// Called automatically every 30 seconds by [_timer] and manually via
+  /// pull-to-refresh or the hero section button.
   Future<void> _refreshAvailability() async {
     if (_spaces.isEmpty) {
       return;

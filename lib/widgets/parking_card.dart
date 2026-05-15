@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../services/parking_service.dart';
 
+/// A card that summarises a single [ParkingResult] in the results list.
+///
+/// Displays the space name, availability badge, distance, price, type,
+/// opening hours, lighting, safety score, an occupancy progress bar, and
+/// action buttons for Details and Navigate. An optional favourite heart
+/// icon is shown when [onFavouriteToggle] is provided.
 class ParkingCard extends StatelessWidget {
+  /// Creates a [ParkingCard] for the given [result].
+  ///
+  /// [onDetails] and [onNavigate] are required callbacks for the two action
+  /// buttons. [isFavourite] and [onFavouriteToggle] are optional; the heart
+  /// icon is hidden when [onFavouriteToggle] is null.
   const ParkingCard({
     super.key,
     required this.result,
@@ -12,10 +23,21 @@ class ParkingCard extends StatelessWidget {
     this.onFavouriteToggle,
   });
 
+  /// The parking result (space + distance) to display.
   final ParkingResult result;
+
+  /// Called when the user taps the Details button.
   final VoidCallback onDetails;
+
+  /// Called when the user taps the Navigate button.
   final VoidCallback onNavigate;
+
+  /// Whether this space is in the user's favourites list.
   final bool isFavourite;
+
+  /// Called when the user taps the heart icon to toggle favourite status.
+  ///
+  /// The heart icon is only rendered when this is non-null.
   final VoidCallback? onFavouriteToggle;
 
   @override
@@ -98,6 +120,9 @@ class ParkingCard extends StatelessWidget {
   }
 }
 
+/// Coloured pill badge showing available vs total spaces.
+///
+/// Renders amber when 5 or fewer spaces remain, green otherwise.
 class _AvailabilityBadge extends StatelessWidget {
   const _AvailabilityBadge({
     required this.availableSpaces,
@@ -141,6 +166,9 @@ class _AvailabilityBadge extends StatelessWidget {
   }
 }
 
+/// Horizontal bar showing what percentage of bays are currently free.
+///
+/// Colour coding: green ≥ 50 %, amber ≥ 20 %, red < 20 %.
 class _OccupancyBar extends StatelessWidget {
   const _OccupancyBar({
     required this.availableSpaces,

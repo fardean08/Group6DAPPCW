@@ -6,7 +6,22 @@ import '../models/destination.dart';
 import '../models/parking_space.dart';
 import '../services/parking_service.dart';
 
+/// An interactive map widget that plots the searched [destination] and all
+/// generated [allSpaces] as markers.
+///
+/// Uses [flutter_map] with a CARTO Voyager raster tile layer (OpenStreetMap
+/// data). Markers for spaces that pass the active filters ([visibleResults])
+/// are rendered at full opacity and are tappable; filtered-out spaces are
+/// dimmed to 35 % opacity and non-interactive.
+///
+/// The camera automatically fits all visible markers whenever [destination]
+/// or [visibleResults] changes.
 class ParkingMap extends StatefulWidget {
+  /// Creates a [ParkingMap].
+  ///
+  /// [allSpaces] drives the full set of markers (both visible and dimmed).
+  /// [visibleResults] is the filtered subset; only these markers are
+  /// interactive and call [onMarkerPressed].
   const ParkingMap({
     super.key,
     required this.destination,
@@ -15,9 +30,16 @@ class ParkingMap extends StatefulWidget {
     required this.onMarkerPressed,
   });
 
+  /// The destination pin shown at the centre of the search area.
   final Destination destination;
+
+  /// All generated parking spaces, shown as either full or dimmed markers.
   final List<ParkingSpace> allSpaces;
+
+  /// Spaces that pass the current filters; their markers are interactive.
   final List<ParkingResult> visibleResults;
+
+  /// Called when the user taps a visible parking marker.
   final ValueChanged<ParkingResult> onMarkerPressed;
 
   @override
@@ -30,6 +52,7 @@ class _ParkingMapState extends State<ParkingMap> {
   @override
   void initState() {
     super.initState();
+    // Fit the camera after the first frame so the map widget is fully laid out.
     WidgetsBinding.instance.addPostFrameCallback((_) => _fitCamera());
   }
 
@@ -48,6 +71,10 @@ class _ParkingMapState extends State<ParkingMap> {
     }
   }
 
+  /// Fits the map camera to show the destination pin and all visible markers.
+  ///
+  /// Falls back to a fixed zoom-15 centre on the destination when there are no
+  /// visible results (single-point case).
   void _fitCamera() {
     final points = [
       LatLng(widget.destination.latitude, widget.destination.longitude),
@@ -145,7 +172,7 @@ class _ParkingMapState extends State<ParkingMap> {
               bottom: 12,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.95),
+                  color: Colors.white.withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: const [
                     BoxShadow(
@@ -170,6 +197,7 @@ class _ParkingMapState extends State<ParkingMap> {
   }
 }
 
+/// Black pill marker placed at the searched destination coordinates.
 class _DestinationMarker extends StatelessWidget {
   const _DestinationMarker();
 
@@ -203,6 +231,13 @@ class _DestinationMarker extends StatelessWidget {
   }
 }
 
+/// Circular marker for a parking space, colour-coded by type and availability.
+///
+/// - Standard spaces use the theme primary colour.
+/// - Wide spaces use cyan.
+/// - Disabled spaces use deep purple.
+/// - Full or filtered-out spaces render in grey (the parent [Opacity] widget
+///   also dims them to 35 %).
 class _ParkingMarker extends StatelessWidget {
   const _ParkingMarker({
     required this.space,
@@ -265,7 +300,7 @@ class _ParkingMarker extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 74),
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.94),
+              color: Colors.white.withValues(alpha: 0.94),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
