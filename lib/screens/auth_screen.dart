@@ -43,8 +43,6 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isLoading = false;
   String? _errorMessage;
 
-  /// Returns true when the error message suggests the user needs to sign up,
-  /// so that a shortcut button can be shown.
   bool get _showSignUpShortcut {
     if (_isSignUp || _errorMessage == null) {
       return false;
@@ -66,11 +64,6 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  /// Validates the form and delegates to [AuthService.signUp] or
-  /// [AuthService.signIn] depending on [_isSignUp].
-  ///
-  /// Sets [_isLoading] during the async call and populates [_errorMessage]
-  /// on failure.
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -105,7 +98,6 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  /// Switches between log-in and sign-up mode and clears any error message.
   void _switchMode(bool signUp) {
     setState(() {
       _isSignUp = signUp;

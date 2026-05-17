@@ -100,7 +100,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     super.dispose();
   }
 
-  /// Reads the persisted set of favourite space IDs from [SharedPreferences].
   Future<void> _loadFavourites() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_favKey);
@@ -110,8 +109,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     });
   }
 
-  /// Adds [id] to favourites if absent, removes it if present, then persists
-  /// the updated set and re-applies filters.
   Future<void> _toggleFavourite(String id) async {
     final updated = Set<String>.from(_favouriteIds);
     if (updated.contains(id)) { updated.remove(id); } else { updated.add(id); }
@@ -121,7 +118,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     _applyFilters();
   }
 
-  /// Reads the persisted list of recent destinations from [SharedPreferences].
   Future<void> _loadRecents() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_recentKey);
@@ -136,7 +132,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     });
   }
 
-  /// Prepends [destination] to the recent list (max 5) and persists it.
   Future<void> _addToRecents(Destination destination) async {
     final updated = [
       destination,
@@ -150,11 +145,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     ]));
   }
 
-  /// Fetches or generates parking spaces for [destination], persists them,
-  /// and triggers [_applyFilters].
-  ///
-  /// Fetches from [ParkingRepository] first; generates via [ParkingService] if
-  /// the repository returns an empty list (first visit to this destination).
+  // Loads spaces from the repo, or generates them if this destination hasn't been visited before
   Future<void> _loadDestination(Destination destination) async {
     setState(() {
       _isLoading = true;
@@ -195,8 +186,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     _applyFilters();
   }
 
-  /// Geocodes the text in [_destinationController] using [GeocodingService]
-  /// and loads the resulting destination.
   Future<void> _searchDestination() async {
     final query = _destinationController.text.trim();
 
@@ -224,8 +213,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     }
   }
 
-  /// Re-runs [ParkingService.filterParkingSpaces] with the current filter
-  /// values and updates [_results].
   void _applyFilters() {
     setState(() {
       var results = _parkingService.filterParkingSpaces(
@@ -246,11 +233,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     });
   }
 
-  /// Simulates a live availability update via [ParkingService.refreshAvailability],
-  /// persists the new values, and triggers [_applyFilters].
-  ///
-  /// Called automatically every 30 seconds by [_timer] and manually via
-  /// pull-to-refresh or the hero section button.
   Future<void> _refreshAvailability() async {
     if (_spaces.isEmpty) {
       return;
