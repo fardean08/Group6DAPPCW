@@ -34,6 +34,11 @@ class _AuthScreenState extends State<AuthScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  final _nameFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+  final _confirmFocusNode = FocusNode();
+
   bool _isSignUp = false;
   bool _isLoading = false;
   String? _errorMessage;
@@ -54,6 +59,10 @@ class _AuthScreenState extends State<AuthScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _nameFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _confirmFocusNode.dispose();
     super.dispose();
   }
 
@@ -163,6 +172,10 @@ class _AuthScreenState extends State<AuthScreen> {
                       if (_isSignUp) ...[
                         TextFormField(
                           controller: _nameController,
+                          focusNode: _nameFocusNode,
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              _emailFocusNode.requestFocus(),
                           decoration: const InputDecoration(
                             labelText: 'Full name',
                             border: OutlineInputBorder(),
@@ -183,6 +196,10 @@ class _AuthScreenState extends State<AuthScreen> {
                       ],
                       TextFormField(
                         controller: _emailController,
+                        focusNode: _emailFocusNode,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) =>
+                            _passwordFocusNode.requestFocus(),
                         decoration: const InputDecoration(
                           labelText: 'Email',
                           border: OutlineInputBorder(),
@@ -204,6 +221,13 @@ class _AuthScreenState extends State<AuthScreen> {
                       const SizedBox(height: 12),
                       TextFormField(
                         controller: _passwordController,
+                        focusNode: _passwordFocusNode,
+                        textInputAction: _isSignUp
+                            ? TextInputAction.next
+                            : TextInputAction.done,
+                        onFieldSubmitted: (_) => _isSignUp
+                            ? _confirmFocusNode.requestFocus()
+                            : _submit(),
                         decoration: const InputDecoration(
                           labelText: 'Password',
                           border: OutlineInputBorder(),
@@ -221,6 +245,9 @@ class _AuthScreenState extends State<AuthScreen> {
                       if (_isSignUp) ...[
                         TextFormField(
                           controller: _confirmPasswordController,
+                          focusNode: _confirmFocusNode,
+                          textInputAction: TextInputAction.done,
+                          onFieldSubmitted: (_) => _submit(),
                           decoration: const InputDecoration(
                             labelText: 'Confirm password',
                             border: OutlineInputBorder(),

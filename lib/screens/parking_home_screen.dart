@@ -333,9 +333,12 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      builder: (context) {
+      builder: (sheetContext) {
         return SafeArea(
           child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
+            ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
               child: Column(
@@ -484,7 +487,14 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
           Center(
             child: Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: Text(widget.user.name),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 120),
+                child: Text(
+                  widget.user.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
             ),
           ),
           IconButton(
@@ -494,12 +504,22 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
           ),
         ],
       ),
-      body: _isLoading
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.translucent,
+        child: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _refreshAvailability,
               child: ListView(
-                padding: const EdgeInsets.all(16),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  16,
+                  16,
+                  16 + MediaQuery.of(context).padding.bottom,
+                ),
                 children: [
                   _HeroSection(
                     subtitle: subtitle,
@@ -601,6 +621,7 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
                 ],
               ),
             ),
+        ),
     );
   }
 }
@@ -690,6 +711,7 @@ class _DestinationSearch extends StatelessWidget {
           children: [
             TextField(
               controller: controller,
+              textInputAction: TextInputAction.search,
               decoration: const InputDecoration(
                 labelText: 'Search destination',
                 hintText: 'Example: Portsmouth Guildhall',
@@ -713,8 +735,10 @@ class _DestinationSearch extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Current destination: ${destination.name}',
+              'Current: ${destination.name.split(',').first.trim()}',
               textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             if (recentDestinations.isNotEmpty) ...[
               const SizedBox(height: 10),
@@ -1053,16 +1077,22 @@ class _DetailsGrid extends StatelessWidget {
       (icon: Icons.straighten_outlined, label: 'Bay width', value: space.bayWidth),
     ];
 
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: details.map((entry) {
-        return _DetailTile(
-          icon: entry.icon,
-          label: entry.label,
-          value: entry.value,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final tileWidth = ((constraints.maxWidth - 10) / 2).clamp(120.0, 340.0);
+        return Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: details.map((entry) {
+            return _DetailTile(
+              icon: entry.icon,
+              label: entry.label,
+              value: entry.value,
+              width: tileWidth,
+            );
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
 }
@@ -1072,18 +1102,18 @@ class _DetailTile extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.value,
+    required this.width,
   });
 
   final IconData icon;
   final String label;
   final String value;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width - 60) / 2;
-
     return Container(
-      width: width.clamp(150.0, 340.0),
+      width: width,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
