@@ -6,6 +6,12 @@ import 'repositories/parking_repository.dart';
 import 'screens/auth_gate.dart';
 import 'services/auth_service.dart';
 
+/// Application entry point.
+///
+/// Attempts to initialise Firebase using [DefaultFirebaseOptions]; if that
+/// fails (e.g. placeholder `firebase_options.dart` in development) the app
+/// falls back to local-only auth and in-memory storage. [SmartParkingApp] is
+/// then run with [firebaseReady] indicating which path is active.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -23,14 +29,32 @@ Future<void> main() async {
   runApp(SmartParkingApp(firebaseReady: firebaseReady));
 }
 
+/// Root [MaterialApp] for Smart Parking Finder.
+///
+/// Selects the correct [AuthService] and [ParkingRepository] implementations
+/// based on [firebaseReady], then mounts [AuthGate] as the home widget so the
+/// user is routed to [AuthScreen] or [ParkingHomeScreen] depending on their
+/// current authentication state.
 class SmartParkingApp extends StatelessWidget {
+  /// Creates a [SmartParkingApp].
+  ///
+  /// Set [firebaseReady] to `true` when Firebase has been successfully
+  /// initialised so that Firebase-backed services are used; `false` activates
+  /// the local fallback mode.
   const SmartParkingApp({
     super.key,
     required this.firebaseReady,
   });
 
+  /// Whether Firebase was successfully initialised at startup.
+  ///
+  /// Controls which [AuthService] and [ParkingRepository] implementations are
+  /// injected into the widget tree: Firebase-backed when `true`, local
+  /// in-memory / [SharedPreferences] fallback when `false`.
   final bool firebaseReady;
 
+  /// Builds the [MaterialApp] with theme, [AuthService], and [ParkingRepository]
+  /// wired to [AuthGate].
   @override
   Widget build(BuildContext context) {
     final AuthService authService =
