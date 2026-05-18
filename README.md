@@ -107,8 +107,6 @@ git push -u origin main
 
 ---
 
-## Coursework report wording
+## Architecture
 
-You can write:
-
-> The final system was implemented in Flutter with Firebase Authentication and Firestore. Firebase Authentication supports login and sign-up, while Firestore stores the generated parking-space data for each searched destination. The Flutter app provides the presentation layer, the service classes provide the application logic layer, and Firebase/Firestore provide the data layer. A local fallback mode was also kept to make development and testing easier if Firebase configuration is unavailable.
+The app is built in Flutter. Firebase Authentication handles login and sign-up, and Firestore stores parking spaces per searched destination. The service classes handle business logic, the screens handle presentation, and Firebase handles data. A local fallback mode keeps the app usable without a Firebase connection.
