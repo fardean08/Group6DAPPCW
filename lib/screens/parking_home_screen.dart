@@ -240,11 +240,6 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
 
     final updated = _parkingService.refreshAvailability(_spaces);
 
-    await widget.repository.replaceParkingSpaces(
-      destinationKey: _destination.key,
-      spaces: updated,
-    );
-
     setState(() {
       _spaces = updated;
       _alerts = _parkingService.spacesWithNewAvailability(updated);
@@ -252,6 +247,11 @@ class _ParkingHomeScreenState extends State<ParkingHomeScreen> {
     });
 
     _applyFilters();
+
+    widget.repository
+        .replaceParkingSpaces(destinationKey: _destination.key, spaces: updated)
+        .timeout(const Duration(seconds: 10))
+        .catchError((_) {});
   }
 
   void _applyPreset(String preset) {
