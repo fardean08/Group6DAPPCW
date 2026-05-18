@@ -1,90 +1,61 @@
-# Smart Parking Finder - Flutter + Firebase
+# Smart Parking Finder — Group 6D
 
 [![Tests](https://github.com/fardean08/Group6DAPPCW/actions/workflows/test.yml/badge.svg)](https://github.com/fardean08/Group6DAPPCW/actions/workflows/test.yml)
 
-**API Documentation:** https://fardean08.github.io/Group6DAPPCW/
+**API Docs:** https://fardean08.github.io/Group6DAPPCW/
 
 **Test Plan:** [docs/Team 6D - Test Plan.xlsx](https://github.com/fardean08/Group6DAPPCW/blob/main/docs/Team%206D%20-%20Test%20Plan.xlsx)
 
-This is a Flutter/Firebase version of the Smart Parking Finder prototype.
+Flutter app with Firebase Authentication and Firestore. Built for the SETaP coursework (Iteration 2).
 
-It includes:
-
-- Firebase Authentication login
-- Firebase Authentication sign up
-- Firestore parking-space storage
-- destination search
-- real map using OpenStreetMap through `flutter_map`
-- parking markers on the map
-- price, distance, type, and lighting filters
-- parking details screen
-- availability refresh every 5 seconds
-- availability alerts
-- Google Maps navigation link
-- automated Flutter unit tests
-- GitHub Actions workflow
+Features:
+- sign up and login via Firebase Auth
+- search a destination using OpenStreetMap
+- map with parking markers (`flutter_map`)
+- filter by price, distance, type and lighting
+- parking details bottom sheet
+- availability refresh
+- availability alerts when spaces free up
+- Google Maps navigation
+- 162 automated tests, CI via GitHub Actions
 
 ---
 
-## How to create the Flutter project
+## Setup
 
-Run:
+**1. Create the Flutter project**
 
 ```bash
 flutter create smart_parking_finder_flutter
 ```
 
-Then copy the files from this pack into the project folder, replacing existing files when asked.
-
-Then run:
+Copy the files into the project folder, then:
 
 ```bash
-cd smart_parking_finder_flutter
 flutter pub get
 ```
 
----
-
-## Firebase setup
-
-1. Go to Firebase Console and create a project.
-2. Enable **Authentication > Sign-in method > Email/Password**.
-3. Enable **Firestore Database**.
-4. Install FlutterFire CLI:
+**2. Connect Firebase**
 
 ```bash
 dart pub global activate flutterfire_cli
-```
-
-5. Configure Firebase:
-
-```bash
 flutterfire configure
 ```
 
-This will generate a real `lib/firebase_options.dart`.
+This generates `lib/firebase_options.dart`. The repo includes a placeholder — replace it after running the above.
 
-This code pack includes a placeholder `firebase_options.dart` so the code is complete, but you should replace it using `flutterfire configure`.
-
----
-
-## Run the app
-
-For Chrome:
-
-```bash
-flutter run -d chrome
-```
-
-For Android emulator:
-
-```bash
-flutter run
-```
+Also enable **Email/Password** under Authentication and create a Firestore database in the Firebase console.
 
 ---
 
-## Run tests
+## Run
+
+```bash
+flutter run -d chrome   # web
+flutter run             # Android
+```
+
+## Test
 
 ```bash
 flutter test --coverage
@@ -92,19 +63,6 @@ flutter test --coverage
 
 ---
 
-## Push to GitHub
-
-```bash
-git init
-git add .
-git commit -m "Initial Flutter Firebase Smart Parking Finder"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/smart-parking-finder-flutter.git
-git push -u origin main
-```
-
----
-
 ## Architecture
 
-The app is built in Flutter. Firebase Authentication handles login and sign-up, and Firestore stores parking spaces per searched destination. The service classes handle business logic, the screens handle presentation, and Firebase handles data. A local fallback mode keeps the app usable without a Firebase connection.
+Firebase Authentication handles auth. Firestore stores parking spaces keyed by destination. Service classes hold the business logic, screens handle the UI. There's a local fallback so the app still runs if Firebase isn't set up.
