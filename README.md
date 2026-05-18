@@ -4,7 +4,7 @@
 
 **API Documentation:** https://fardean08.github.io/Group6DAPPCW/
 
-**Test Plan:** [docs/test-plan.pdf](https://github.com/fardean08/Group6DAPPCW/blob/main/docs/test-plan.pdf) *(download to view correctly — GitHub's PDF viewer may show formatting issues)*
+**Test Plan:** [docs/Team 6D - Test Plan.xlsx](https://github.com/fardean08/Group6DAPPCW/blob/main/docs/Team%206D%20-%20Test%20Plan.xlsx)
 
 This is a Flutter/Firebase version of the Smart Parking Finder prototype.
 
