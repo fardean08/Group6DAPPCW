@@ -21,21 +21,50 @@ class ParkingSpace {
     required this.notes,
   });
 
+  /// Firestore document ID.
   final String id;
+
+  /// Human-readable name of the car park.
   final String name;
+
+  /// Latitude in decimal degrees (WGS-84).
   final double latitude;
+
+  /// Longitude in decimal degrees (WGS-84).
   final double longitude;
+
+  /// Cost per hour in GBP.
   final double pricePerHour;
+
+  /// Number of bays currently free.
   final int availableSpaces;
-  // Stored so refresh can tell if occupancy is trending up or down
+
+  /// Availability count from the previous refresh cycle — used to determine
+  /// whether occupancy is trending up or down.
   final int previousAvailableSpaces;
+
+  /// Total number of bays in the car park.
   final int totalSpaces;
+
+  /// Bay type: `"standard"`, `"wide"`, or `"disabled"`.
   final String type;
+
+  /// Whether the car park has lighting.
   final bool hasLighting;
+
+  /// Safety rating from 1 (lowest) to 5 (highest).
   final int safetyScore;
+
+  /// Opening hours string, e.g. `"24/7"` or `"Mon–Sat 08:00–20:00"`.
   final String openingHours;
+
+  /// Any access restrictions, e.g. `"Permit holders only after 18:00"`.
   final String restrictions;
+
+  /// Bay width category, e.g. `"standard"` or `"wide"`.
   final String bayWidth;
+
+  /// Free-text notes about the car park.
   final String notes;
 
   /// Creates a [ParkingSpace] from a Firestore document. Missing fields use sensible defaults.

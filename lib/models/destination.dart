@@ -1,13 +1,19 @@
 /// A location the user searched for, used as the centre point for nearby parking.
 class Destination {
+  /// Creates a [Destination] from a geocoding result.
   const Destination({
     required this.name,
     required this.longitude,
     required this.latitude,
   });
 
+  /// Display name returned by the Nominatim geocoding API.
   final String name;
+
+  /// Latitude in decimal degrees (WGS-84).
   final double latitude;
+
+  /// Longitude in decimal degrees (WGS-84).
   final double longitude;
 
   /// URL-safe slug used as the Firestore document key.
