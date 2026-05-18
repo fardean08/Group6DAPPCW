@@ -24,8 +24,6 @@ It includes:
 - automated Flutter unit tests
 - GitHub Actions workflow
 
-The app also has a local fallback mode, so it can still open if Firebase is not configured yet. For the real coursework demo, configure Firebase and enable Email/Password Authentication.
-
 ---
 
 ## How to create the Flutter project
